@@ -1,0 +1,16 @@
+{
+  "name": "entrega-1",
+  "version": "1.0.0",
+  "description": "Primer Entrega",
+  "main": "script.js",
+  "type": "module",
+  "scripts": {
+    "start": "node script.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kleiman - Yuzefoff",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "^8.11.3"
+  }
+}
