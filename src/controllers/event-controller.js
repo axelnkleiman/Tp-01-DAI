@@ -1,5 +1,5 @@
 import express from "express";
-import EventService from "../servicios/event-service.js";
+import {EventService} from "../servicios/event-service.js";
 
 const router = express.Router();
 const eventSevice = new EventService();
@@ -42,6 +42,14 @@ router.get("/:id", (request, response) =>{
     const price = request.query.price;
     const enabled_for_enrollment = request.query.enabled_for_enrollment;
     const max_assistance = request.query.max_assistance;
+
+    try{
+        const detalleEvent = eventSevice.DetallarEvent(name, description, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance);
+        return response.json(detalleEvent);
+    } catch(error){
+        console.log("ERROR");
+        return response.json("ERROR");
+    }
 });
 
 router.get("/:id/enrollment", (request, response) =>{

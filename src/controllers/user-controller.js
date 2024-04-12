@@ -1,5 +1,5 @@
 import express from "express";
-import UserService from "../servicios/user-service.js";
+import {UserService} from "../servicios/user-service.js";
 
 const router = express.Router();
 const userService = new UserService();
@@ -37,7 +37,7 @@ router.post("/register", (request, response) =>{
     })
 });
 
-router.post("/event/:id/enrollment", (request, response) => {
+router.post("/events/:id/enrollment", (request, response) => {
     const body = request.body;
     return response.status(201).send({
         first_name: body.first_name,

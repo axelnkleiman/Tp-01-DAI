@@ -14,4 +14,7 @@ export class EventService{
         const query = `SELECT * from events limit ${pageSize} offset ${page}`
         const query2 = `SELECT events.name, event_categories.name, events.start_date, tags.name IF(events.name = ${name}, event_cateories.name = ${category} events.start_date = ${startDate}, tags.name = ${tag})`
     }
+    DetallarEvent(name, description, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance){
+        const query = `SELECT * from events IF(name = ${name}, description = ${description}, start_date = ${start_date}, duration_in_minutes = ${duration_in_minutes}, price = ${price}, enabled_for_enrollment = ${enabled_for_enrollment}, max_assistance = ${max_assistance})`;
+    }
 }
