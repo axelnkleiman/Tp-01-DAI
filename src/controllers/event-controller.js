@@ -69,4 +69,22 @@ router.get("/:id/enrollment", (request, response) =>{
     }
 });
 
+router.post("/", (request, response) => {
+    const body = request.body;
+    return response.status(201).send({
+        page: body.page,
+        pageSize: body.pageSize,
+        first_name: body.first_name,
+        last_name: body.last_name,
+        username: body.username,
+        attended: body.attended,
+    });
+});
+
+router.delete("/:id", (request, response) => {
+    const id = request.params.id;
+    console.log(id);
+    return response.send("Ok!");
+  });
+
 export default router;

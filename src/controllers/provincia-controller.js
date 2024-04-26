@@ -34,4 +34,19 @@ router.get("/", (request, response) =>{
     } 
 });
 
+router.patch("/:id", (request, response) => {
+    return {
+      id: request.params.id,
+      name: "4 fromages",
+      price: 25,
+    };
+  });
+  
+
+router.delete("/:id", (request, response) => {
+    const id = request.params.id;
+    console.log(id);
+    return response.send("Ok!");
+  });
+
 export default router;
