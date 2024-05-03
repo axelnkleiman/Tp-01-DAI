@@ -25,7 +25,7 @@ router.get("/", (request, response) =>{
     const startDate = request.query.startDate;
     const tag = request.query.tag;
 
-    try{
+     try{
         const eventFiltros = eventSevice.getEventsConFiltro(pageSize, page, name, category, startDate, tag);
         return response.json(eventFiltros);
     } catch (error){

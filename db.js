@@ -5,3 +5,11 @@ export const DBConfig = {
     password: "root",
     database: "DAI-Eventos",
 }
+import 'dotenv/config'
+
+const config = {
+    user    : process.env.DB_USER,
+    password    : process.env.DB_PASSWORD,
+    database    : process.env.DB_DATABASE,
+}
+export default config;
