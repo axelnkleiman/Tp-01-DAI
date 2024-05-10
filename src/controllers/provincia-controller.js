@@ -1,4 +1,4 @@
-import express, { request, response } from "express";
+import express from "express";
 import {ProvinciaService} from "../servicios/provincia-service.js";
 
 const router = express.Router();
@@ -37,8 +37,6 @@ router.get("/", (request, response) =>{
 router.patch("/:id", (request, response) => {
     return {
       id: request.params.id,
-      name: "4 fromages",
-      price: 25,
     };
   });
   

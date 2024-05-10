@@ -1,6 +1,5 @@
 import pkg from "pg";
 import { DBConfig } from "../db.js";
-import { query } from "express";
 
 export default class ProvinciaRepository {
     constructor() {

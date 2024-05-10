@@ -1,12 +1,14 @@
 import express from "express";
 import {EventService} from "../servicios/event-service.js";
+import { AuthMiddleware } from "../auth/authmiddleware.js";
 
 const router = express.Router();
 const eventSevice = new EventService();
 
-router.get("/", (request, response) => {
+router.get("/", AuthMiddleware, (request, response) => {
     const limit = request.query.limit;
     const offset = request.query.offset;
+    request.user;
 
     try{
         const allEvents = eventSevice.getAllEvents(limit, offset);
@@ -51,24 +53,6 @@ router.get("/:id", (request, response) =>{
         return response.json("ERROR");
     }
 });
-
-router.get("/:id/enrollment", (request, response) =>{
-    const pageSize = request.query.pageSize;
-    const page = request.query.page;
-    const first_name = request.query.first_name;
-    const last_name = request.query.last_name;
-    const username = request.query.username;
-    const attended = request.query.attended;
-
-    try{
-        const userFiltro = eventSevice.getUserConFiltro(pageSize, page, first_name, last_name, username, attended);
-        return response.json(userFiltro);
-    } catch(error){
-        console.log("ERROR");
-        return response.json("ERROR");
-    }
-});
-
 router.post("/", (request, response) => {
     const body = request.body;
     return response.status(201).send({
@@ -86,5 +70,32 @@ router.delete("/:id", (request, response) => {
     console.log(id);
     return response.send("Ok!");
   });
+
+  router.post("/events/:id/enrollment", (request, response) => {
+    const body = request.body;
+    return response.status(201).send({
+        first_name: body.first_name,
+        last_name : body.last_name,
+        username: body.username,
+        password: body.password,
+    })
+});
+
+router.get("/:id/enrollment", (request, response) =>{
+    const pageSize = request.query.pageSize;
+    const page = request.query.page;
+    const first_name = request.query.first_name;
+    const last_name = request.query.last_name;
+    const username = request.query.username;
+    const attended = request.query.attended;
+
+    try{
+        const userFiltro = eventSevice.getUserConFiltro(pageSize, page, first_name, last_name, username, attended);
+        return response.json(userFiltro);
+    } catch(error){
+        console.log("ERROR");
+        return response.json("ERROR");
+    }
+});
 
 export default router;

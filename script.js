@@ -8,7 +8,6 @@ const app = express();
 app.use(express.json()); 
 const port = 3000;
 
-
 app.use("/events", EventController);
 app.use("/user", UserController);
 app.use("/provincia", ProvinciaController);

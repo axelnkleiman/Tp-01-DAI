@@ -37,14 +37,4 @@ router.post("/register", (request, response) =>{
     })
 });
 
-router.post("/events/:id/enrollment", (request, response) => {
-    const body = request.body;
-    return response.status(201).send({
-        first_name: body.first_name,
-        last_name : body.last_name,
-        username: body.username,
-        password: body.password,
-    })
-});
-
 export default router;
