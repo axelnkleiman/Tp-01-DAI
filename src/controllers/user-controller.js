@@ -1,5 +1,6 @@
-import express from "express";
+import express, { request, response } from "express";
 import {UserService} from "../servicios/user-service.js";
+import { AuthMiddleware } from "../auth/authmiddleware.js";
 
 const router = express.Router();
 const userService = new UserService();
@@ -37,4 +38,24 @@ router.post("/register", (request, response) =>{
     })
 });
 
+router.post("/api/login", AuthMiddleware, (request, response) =>{
+    const body = request.body;
+    return response.status(201).send({
+        username: body.username,
+        password: body.password
+    })
+});
+router.post("/api/register", AuthMiddleware, (request, response) =>{
+    const body = request.body;
+    return response.status(201).send({
+        first_name: body.first_name,
+        last_name: body.last_name,
+        username: body.username,
+        password: body.password,
+    })
+});
+
+router.post("/api/event/{id}/enrollment/", AuthMiddleware, (request, response) =>{
+
+})
 export default router;

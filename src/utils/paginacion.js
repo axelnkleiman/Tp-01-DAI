@@ -1,4 +1,4 @@
-/*export class PaginationDto{
+export class PaginationDto{
     limit;
     offset;
     nextpage;
@@ -10,7 +10,7 @@ export class Pagination {
     offsetRegex = /offset=\d+/;
 
     parseLimit(limit){
-    return !isNaN(parseInt(limit)) ? parseInt(limit) : 15;
+        return !isNaN(parseInt(limit)) ? parseInt(limit) : 15;
     }
 
     parseOff(offset){
@@ -23,7 +23,7 @@ export class Pagination {
         response.offset = currenOffset;
         response.total = total;
         if(limit !== -1){
-            response.nextPage = limit + currentOffset < total ? this.builNextPage(path, limit, currenOffset)
+            response.nextPage = limit + currentOffset < total ? this.builNextPage(path, limit, currenOffset) : null
         }
         return response;
     }
@@ -31,4 +31,3 @@ export class Pagination {
         let url = BASE
     }
 }
-*/
