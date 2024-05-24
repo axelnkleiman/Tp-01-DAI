@@ -1,6 +1,5 @@
 import express from "express";
 import {EventService} from "../servicios/event-service.js";
-import { AuthMiddleware } from "../auth/authmiddleware.js";
 
 const router = express.Router();
 const eventSevice = new EventService();
@@ -97,5 +96,86 @@ router.get("/:id/enrollment", (request, response) =>{
         return response.json("ERROR");
     }
 });
+
+router.patch("/",AuthMiddleware, async (request, response) => {
+    const Event = {};
+    Event.name = request.query.name;
+    Event.description = request.query.description;
+    Event.start_date = request.query.start_date;
+    Event.duration_in_minutes = request.query.duration_in_minutes;
+    Event.price = request.query.price;
+    Event.enabled_for_enrollment = request.query.enabled_for_enrollment;
+    Event.max__assistance = request.query.max__assistance;
+  
+    Event.id = request.query.id;
+  
+    try {
+      const respuesta = await EventService.patchEvento(Event);
+      return response.json(respuesta);
+    } catch (error) {
+      console.log(error);
+      return res.json(error);
+    }
+  });
+
+  router.get("/:id", async (request, response) => {
+    const id = request.params.id;
+    console.log(id);
+    try {
+      const EventById = await EventService.getEventById(id);
+      return response.json(EventById);
+    } catch (error) {
+      console.log(error);
+      return response.json(error);
+    }
+  });
+  
+  router.get("/:id/enrollment", async (request, response) => {
+    const enrollment = {};
+    enrollment.id = request.params.id;
+    enrollment.name = request.query.name;
+    enrollment.first_name = request.query.first_name;
+    enrollment.last_name = request.query.last_name;
+    enrollment.username = request.query.username;
+    enrollment.attended = request.query.attended;
+    enrollment.rating = request.query.rating;
+  
+      console.log("OK");
+      try {
+        console.log("LLEGO");
+        const i = await EventService.getEventEnrollment(enrollment);
+        return response.json(i);
+      } catch (error) {
+        console.log(error);
+        return response.json(error);
+      }
+  });
+  
+  router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
+    const enrollment = {};
+    enrollment.id = request.params.id;
+    enrollment.attended = request.query.attended;
+    enrollment.rating = request.query.rating;
+    enrollment.description = request.query.descripcion;
+    enrollment.observations = request.query.observations;
+    try {
+      const mensaje = await EventService.InscripcionEvento(enrollment);
+      return response.json(mensaje);
+    } catch (error) {
+      console.log(error);
+      return response.json(error);
+    }
+  });
+  router.patch("/:id/enrollment",AuthMiddleware, (request, response) => {
+    const idEvent = request.params.id;
+    const rating = request.query.rating;
+    try {
+      const mensaje = EventService.CambiarRating(idEvent, rating);
+      return response.json(mensaje);
+    } catch (error) {
+      console.log(error);
+      return response.json(error);
+    }
+  });  
 
 export default router;
