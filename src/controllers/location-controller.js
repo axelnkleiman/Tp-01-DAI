@@ -1,4 +1,4 @@
-import express, { Router } from "express";
+import express from "express";
 import {LocationService} from "../servicios/location-service.js";
 import { AuthMiddleware } from "../auth/authmiddleware.js";
 
@@ -29,6 +29,9 @@ router.get("/:id", (request, response) =>{
         console.log("ERROR");
         return response.status(404).send;
     }
+});
+router.get("/:id", AuthMiddleware, (request, response) =>{
+        
 })
 
 export default router;
