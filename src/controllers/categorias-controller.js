@@ -1,4 +1,4 @@
-import express, { request, response } from "express";
+import express from "express";
 
 const router = express.Router();
 const categoriaService = new CategoriaService();

@@ -1,4 +1,4 @@
-import express, { request, response } from "express";
+import express from "express";
 import {UserService} from "../servicios/user-service.js";
 import { AuthMiddleware } from "../auth/authmiddleware.js";
 

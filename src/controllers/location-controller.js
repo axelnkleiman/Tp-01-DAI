@@ -1,37 +1,39 @@
 import express from "express";
 import {LocationService} from "../servicios/location-service.js";
-import { AuthMiddleware } from "../auth/authmiddleware.js";
+import AuthMiddleware from "../auth/authmiddleware.js";
+
+const locationService = new LocationService();
 
 const router = express.Router();
-const locationSevice = new LocationService();
 
-router.get("/", (request, response) =>{
-    const page = request.query.page;
+router.get("/", async (request, response) => {
     const pageSize = request.query.pageSize;
-
-    try{
-        const allLocations = locationSevice.getAllLocations(page, pageSize);
-        return response.status(200).send;
-    }catch(error){
-        console.log("ERROR");
-        return response.json("ERROR");
+    const reqPage = request.query.reqPage;
+    try {
+      const Localidades = await locationService.getLocalidades(pageSize, reqPage);
+      return response.status(200).json(Localidades);
+    } catch (error) {
+      console.log(error);
+      return response.json(error);
     }
 });
-router.get("/:id", (request, response) =>{
-    const page = request.query.page;
-    const pageSize = request.query.pageSize;
-    const id = request.params.id;
-    
-    try{
-        const getLocationId = locationSevice.GetLocationId(page, pageSize, id);
-        return response.status(200).send;
-    }catch(error){
-        console.log("ERROR");
-        return response.status(404).send;
+
+
+router.get("/:id", async (request, response) => {
+  const id = request.params.id;
+  console.log(id);
+  try {
+    const locationById = await locationService.getLocalidadById(id);
+    if (locationById!=null) {
+      return response.status(200).json(LocalidadById);
+    }else{
+      return response.status(401).json("No existe la id");
+  
     }
+  } catch (error) {
+    console.log(error);
+      return response.json(error);
+  }
 });
-router.get("/:id", AuthMiddleware, (request, response) =>{
-        
-})
 
 export default router;

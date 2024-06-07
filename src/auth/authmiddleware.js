@@ -1,4 +1,5 @@
 import DecryptToken from './jwt.js';
+
 export function AuthMiddleware(req, res, next){
     if(!req.headers.authorization){
         req.status(401).send('Forbidden');
@@ -7,4 +8,6 @@ export function AuthMiddleware(req, res, next){
         const decryptedToken = DecryptToken(token);
         req.user = decryptedToken.payload;
     }
+
+    next();
 }
