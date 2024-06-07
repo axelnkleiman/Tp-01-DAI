@@ -1,5 +1,5 @@
 import express from "express";
-import {EventLocationService} from "../servicios/Event-LocationService.js";
+import {EventLocationService} from "../servicios/eventLocation-service.js";
 import AuthMiddleware from "../auth/authmiddleware.js";
 
 const router = express.Router();
@@ -36,22 +36,22 @@ router.get("/:id", AuthMiddleware , async (request, response) => {
 });  
 
 router.post("/",AuthMiddleware, async (request,response)=>{
-const EventLocation={}
-EventLocation.id_location=request.body.id_location;
-EventLocation.name=request.body.name;
-EventLocation.full_adress=request.body.full_adress;
-EventLocation.max_capacity=request.body.max_capacity;
-EventLocation.latitude=request.body.latitude;
-EventLocation.longitude=request.body.longitude;
-EventLocation.id_creator_user=request.user.id;
+    const EventLocation={}
+    EventLocation.id_location=request.body.id_location;
+    EventLocation.name=request.body.name;
+    EventLocation.full_adress=request.body.full_adress;
+    EventLocation.max_capacity=request.body.max_capacity;
+    EventLocation.latitude=request.body.latitude;
+    EventLocation.longitude=request.body.longitude;
+    EventLocation.id_creator_user=request.user.id;
 
-try {
-    const respuesta = await eventLocationService.InsertEvLoc(Evento);;
-    return response.json(respuesta);
-  } catch (error) {
-    console.log(error);
-    return response.json(error);
-  }
+    try {
+        const respuesta = await eventLocationService.InsertEvLoc(Evento);;
+        return response.json(respuesta);
+    } catch (error) {
+        console.log(error);
+        return response.json(error);
+    }
 
 });
 

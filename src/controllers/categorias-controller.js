@@ -1,9 +1,11 @@
-import express from "express";
+/*import express from "express";
+import { CategoriaService } from "../servicios/categorias-service";
+import AuthMiddleware from "../auth/authmiddleware";
 
 const router = express.Router();
 const categoriaService = new CategoriaService();
 
-router.get("/", (request, response) =>{
+router.get("/", AuthMiddleware, (request, response) =>{
     const pageSize = request.query.pageSize;
     const page = request.query.page;
     const id = request.query.id;
@@ -11,7 +13,7 @@ router.get("/", (request, response) =>{
     const display_order = request.query.display_order;
 
     try{
-        GetAllCategories(pageSize, page, id, name, display_order);
+        const allCategorias = categoriaService.GetAllCategories(pageSize, page, id, name, display_order);
         return response.status(200).send;
 
     } catch (error){
@@ -21,4 +23,4 @@ router.get("/", (request, response) =>{
 });
 
 
-export default router;
+export default router;*/
