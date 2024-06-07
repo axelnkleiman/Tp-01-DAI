@@ -1,6 +1,6 @@
-/*import express from "express";
-import { CategoriaService } from "../servicios/categorias-service";
-import AuthMiddleware from "../auth/authmiddleware";
+import express from "express";
+import { CategoriaService } from "../servicios/Categorias-service.js";
+import AuthMiddleware from "../auth/AuthMiddleware.js";
 
 const router = express.Router();
 const categoriaService = new CategoriaService();
@@ -23,4 +23,4 @@ router.get("/", AuthMiddleware, (request, response) =>{
 });
 
 
-export default router;*/
+export default router;

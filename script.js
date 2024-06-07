@@ -17,8 +17,6 @@ app.use("/location", LocationController);
 app.use("/categories", CategoriaController);
 app.use("/eventLocation", EventLocationController);
 
-app.use(ErrorMiddleware);
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
