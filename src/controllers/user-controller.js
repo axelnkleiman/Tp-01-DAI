@@ -1,6 +1,6 @@
 import express from "express";
 import {UserService} from "../servicios/user-service.js";
-import AuthMiddleware from "../auth/AuthMiddleware.js";
+import AuthMiddleware from "../auth/authMiddleware.js";
 
 const router = express.Router();
 const userService = new UserService();

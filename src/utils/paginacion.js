@@ -1,33 +1,57 @@
-export class PaginationDto{
-    limit;
-    offset;
-    nextpage;
-    total;
+import "dotenv/config";
+
+const BASE_URL = process.env.BASE_URL;
+
+export class PaginationDto {
+  limit;
+  offset;
+  nextPage;
+  total;
 }
 
 export class Pagination {
-    limitRegex = /limit=\d+/;
-    offsetRegex = /offset=\d+/;
+  limitRegex = /limit=\d+/;
+  offsetRegex = /offset=\d+/;
 
-    parseLimit(limit){
-        return !isNaN(parseInt(limit)) ? parseInt(limit) : 15;
+  parseLimit(limit) {
+    return !isNaN(parseInt(limit)) ? parseInt(limit) : 1;
+  }
+
+  parseOffset(offset) {
+    return !isNaN(parseInt(offset)) ? parseInt(offset) : 0;
+  }
+
+  buildPaginationDto(limit, currentOffset, total, path) {
+    const response = new PaginationDto();
+    response.limit = limit;
+    response.offset = currentOffset;
+    response.total = total;
+    if (limit !== -1) {
+      response.nextPage =
+        limit + currentOffset*limit < total
+          ? this.buildNextPage(path, limit, currentOffset)
+          : null;
     }
 
-    parseOff(offset){
-        return !isNaN (parseInt(offset)) ? parseInt(offset) : 0;
+    return response;
+  }
+
+  buildNextPage(path, limit, currentOffset) {
+    let url = BASE_URL + path;
+    if (this.limitRegex.test(url)) {
+      url = url.replace(this.limitRegex, `limit=${limit}`);
+    } else {
+      url = `${url}${url.includes("?") ? "&" : "?"}limit=${limit}`;
     }
 
-    buildPaginationDto(limit, currenOffset, total, path){
-        const response = new PaginationDto();
-        response.limit = limit;
-        response.offset = currenOffset;
-        response.total = total;
-        if(limit !== -1){
-            response.nextPage = limit + currentOffset < total ? this.builNextPage(path, limit, currenOffset) : null
-        }
-        return response;
+    if (this.offsetRegex.test(url)) {
+      url = url.replace(this.offsetRegex, `offset=${currentOffset + 1}`);
+    } else {
+      url = `${url}${url.includes("?") ? "&" : "?"}offset=${
+        currentOffset + 1
+      }`;
     }
-    buildNextPage(path, limit, currenOffset){
-        let url = BASE
-    }
+
+    return url;
+  }
 }

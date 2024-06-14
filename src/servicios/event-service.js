@@ -1,20 +1,48 @@
+import EventRepository from "../repositorios/event-repository.js";
+import { Pagination} from "../utils/paginacion.js";
+const repository = new EventRepository();
+
+const pagination = new Pagination();
+
 export class EventService{
-    getAllEvents(pageSize, requestedPage){
-        const query = `SELECT * FROM events limit ${pageSize} offset ${requestedPage}`;
-        const query2 = `SELECT COUNT(*) FROM events`;
-        const query3 = `SELECT event.name, event.description, event_categories.name, event_locations.name, event.start_date, event.duration_in_minutes, event.price, event.enabled_for_enrollment, event.max_assistance, users.username FROM evenets 
-        INNER JOIN event_categories 
-        ON id_event_category = event_categories.id
-        INNER JOIN event_locations
-        ON id_event_location = event_locations.id
-        INNER JOIN users
-        ON id_creator_user = users.id`
+    async getEventByFilter(Event, pageSize, reqPage) {
+        const parsedLimit = pagination.parseLimit(pageSize);
+        const parsedOffset = pagination.parseOffset(reqPage);
+        const eventPorFiltro = await repository.getEventByFilter(Event, parsedLimit, parsedOffset);
+        return {eventPorFiltro};
     }
-    getEventsConFiltro(pageSize, page, name, category, startDate, tag){
-        const query = `SELECT * from events limit ${pageSize} offset ${page}`
-        const query2 = `SELECT events.name, event_categories.name, events.start_date, tags.name IF(events.name = ${name}, event_cateories.name = ${category} events.start_date = ${startDate}, tags.name = ${tag})`
+    
+      async getEventById(id) {
+        return await repository.getEventById(id);
     }
-    DetallarEvent(name, description, start_date, duration_in_minutes, price, enabled_for_enrollment, max_assistance){
-        const query = `SELECT * from events IF(name = ${name}, description = ${description}, start_date = ${start_date}, duration_in_minutes = ${duration_in_minutes}, price = ${price}, enabled_for_enrollment = ${enabled_for_enrollment}, max_assistance = ${max_assistance})`;
+    
+      async getEventEnrollment(enrollment) {
+        const eventEnrollment = await repository.getEventEnrollment(enrollment);
+        return eventEnrollment;
+    }
+    
+      async patchEvento(Event) {
+        await repository.patchEvento(Event);
+        return "Se actualizo";
+    }
+    
+      async DeleteEvent(id) {
+       await repository.DeleteEvent(id);
+        return "Se elimino";
+    }
+    
+      async InscripcionEvento(enrollment) {
+        await repository.InscripcionEvento(enrollment);
+        return "Se inscribio";
+    }
+    
+      async CambiarRating(id, rating) {
+        await repository.UpdateRating(rating,id);
+        return "Se actualizo el rating";
+    }
+    
+      async InsertEvento(event) {    
+        await repository.InsertEvent(event);
+        return "Se inserto";
     }
 }

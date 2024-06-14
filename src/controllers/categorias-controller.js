@@ -1,6 +1,6 @@
 import express from "express";
 import { CategoriaService } from "../servicios/Categorias-service.js";
-import AuthMiddleware from "../auth/AuthMiddleware.js";
+import AuthMiddleware from "../auth/authMiddleware.js";
 
 const router = express.Router();
 const categoriaService = new CategoriaService();
@@ -14,7 +14,10 @@ router.get("/", AuthMiddleware, (request, response) =>{
 
     try{
         const allCategorias = categoriaService.GetAllCategories(pageSize, page, id, name, display_order);
-        return response.status(200).send;
+        return(
+            response.status(200).send,
+            response.json(allCategorias)
+        );
 
     } catch (error){
         console.log("ERROR");
