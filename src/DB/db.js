@@ -1,6 +1,6 @@
-import "dotenv/config"
+import "dotenv/config";
 
-export const BDconfig={
+export const BDConfig={
     host:process.env.BD_HOST ?? '',
     port:process.env.BD_PORT ?? 5432,
     user:process.env.USER ?? 'postgres',

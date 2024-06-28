@@ -6,7 +6,7 @@ const Paginacion = new Pagination();
 const repository= new LocationRepository();
 const repositoryEventLocation = new EventLocationRepository()
 
-export class LocalidadService {
+export class LocationService {
 
     async getLocalidades(limit, offset) {
         const parsedLimit = Paginacion.parseLimit(limit);

@@ -1,10 +1,10 @@
 import pg from "pg";
-import { BDconfig } from "../DB/db.js";
+import { BDConfig } from "../DB/db.js";
 
 export default class EventRepository {
   constructor() {
     const { Client } = pg;
-    this.BDclient = new Client(BDconfig);
+    this.BDclient = new Client(BDConfig);
     this.BDclient.connect();
   }
 

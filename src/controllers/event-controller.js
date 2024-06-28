@@ -5,7 +5,6 @@ import AuthMiddleware from "../auth/authMiddleware.js";
 const router = express.Router();
 const eventService = new EventService();
 
-
 const esFecha = (fecha) => {
   const patron = /^\d{4}-\d{2}-\d{2}$/;
   const numeros = /^\d+$/;

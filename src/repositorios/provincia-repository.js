@@ -1,10 +1,10 @@
 import pkg from "pg";
-import { DBConfig } from "../db.js";
+import { BDConfig } from "../db.js";
 
 export default class ProvinciaRepository {
     constructor() {
         const { Client } = pkg;
-        this.DBClient = new Client(DBConfig);
+        this.DBClient = new Client(BDConfig);
         this.DBClient.connect();
     }
     async getProvinciaByIdAsync(id) {

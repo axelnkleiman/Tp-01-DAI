@@ -1,6 +1,6 @@
 import pg from "pg";
-import { DBConfig } from "../../db.js";
-const client = new pg.Client(DBConfig);
+import { BDConfig } from "../DB/db.js";
+const client = new pg.Client(BDConfig);
 export default class EventLocationRepository{
     construct(){
         const {Client} = pg;
