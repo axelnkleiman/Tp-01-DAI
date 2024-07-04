@@ -1,5 +1,5 @@
 import EventRepository from "../repositorios/event-repository.js";
-import { Pagination} from "../utils/paginacion.js";
+import { Pagination } from "../utils/Paginacion.js";
 const repository = new EventRepository();
 
 const pagination = new Pagination();
@@ -23,26 +23,26 @@ export class EventService{
     
       async patchEvento(Event) {
         await repository.patchEvento(Event);
-        return "Se actualizo";
+        return "Evento Actualizado correctamente";
     }
     
       async DeleteEvent(id) {
        await repository.DeleteEvent(id);
-        return "Se elimino";
+        return "Evento Eliminado correctamente";
     }
     
       async InscripcionEvento(enrollment) {
         await repository.InscripcionEvento(enrollment);
-        return "Se inscribio";
+        return "Evento Inscripto correctamente";
     }
     
       async CambiarRating(id, rating) {
         await repository.UpdateRating(rating,id);
-        return "Se actualizo el rating";
+        return "Rating actualizado correctamente";
     }
     
       async InsertEvento(event) {    
         await repository.InsertEvent(event);
-        return "Se inserto";
+        return "Evento Insertado correctamente";
     }
 }

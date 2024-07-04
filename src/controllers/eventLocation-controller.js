@@ -1,6 +1,6 @@
 import express from "express";
 import {EventLocationService} from "../servicios/eventLocation-service.js";
-import AuthMiddleware from "../auth/authmiddleware.js";
+import AuthMiddleware from "../auth/authMiddleware.js";
 
 const router = express.Router();
 const eventLocationService = new EventLocationService();

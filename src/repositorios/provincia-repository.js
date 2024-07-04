@@ -1,25 +1,124 @@
-import pkg from "pg";
-import { BDConfig } from "../db.js";
+import pg from "pg";
+import { BDConfig } from "../DB/db.js";
 
-export default class ProvinciaRepository {
-    constructor() {
-        const { Client } = pkg;
-        this.DBClient = new Client(BDConfig);
-        this.DBClient.connect();
+export default class ProvinciaRepository{
+    constructor(){
+        const {Client}=pg;
+        this.BDclient=new Client(BDConfig)
+        this.BDclient.connect();
     }
-    async getProvinciaByIdAsync(id) {
-        let returnEntity = null;
+
+    async cantProvincias(){
+      try {
+        var sql = "SELECT COUNT(*) FROM provinces"
+        const result = await this.BDclient.query(sql)
+        return result.rows[0].count
+      } catch (error) {
+        return error;
+      }
+    }
+
+    async getProvinciaById(id){
+        let entity = null;
         try{
-            const sql = "SELECT * from provinces p WHERE p.id = $1";
-            const values = {id};
-            const result = await this.DBClient.query(sql, values);
-
-            if(result.rows.length > 0) {
-                returnEntity = result.rows(0);
+            const sql="SELECT * FROM provinces WHERE id=$1";
+            const values=[id];
+            const result=await this.BDclient.query(sql,values);
+            if(result.rows.length>0){
+                entity = result.rows[0];
             }
-        } catch (error) {
-            console.log(error);
+        
+        }catch(error){
+            console.log(error)
         }
-        return returnEntity;
+        return entity;
     }
-}   
+
+    async getProvincias(limit, offset){
+        let entity = null;
+        try{
+            const sql="SELECT * FROM provinces limit $1 offset $2";
+            const values = [limit, (offset*limit)]
+            const result=await this.BDclient.query(sql, values);
+            
+            if(result.rows.length>0){
+                entity=result.rows;
+            }
+        }catch(error){
+            console.log(error)
+        }
+        return entity;
+    }
+
+    async patchProvincia(Provincia){
+            let entity = null;
+            var index = 2;
+            const values = [Provincia.id];
+        
+            try {
+              var sql = `UPDATE provinces SET`;
+              if (Provincia.name != null) {
+                sql += ` name=$${index},`;
+                values.push(Provincia.name)
+                index++;
+              }
+              if (Provincia.full_name != null) {
+                sql += ` full_name=$${index},`;
+                values.push(Provincia.full_name)
+                index++;
+              }
+              if (Provincia.latitude!= null) {
+                sql += ` latitude=$${index},`;
+                values.push(Provincia.latitude)
+                index++;
+              }
+              if (Provincia.longitude!= null) {
+                sql += ` longitude=$${index},`;
+                values.push(Provincia.longitude)
+                index++;
+               }
+              if (Provincia.display_order!= null) {
+                sql += ` display_order=$${index},`;
+                values.push(Provincia.display_order)
+                index++;     
+              }
+              if (sql.endsWith(",")) {
+                sql = sql.slice(0, -1);
+              }
+              sql += ` WHERE id=$1`;
+              const result = await this.BDclient.query(sql, values);
+              entity=result.rowsAffected;
+            } catch (error) {
+              console.log(error);
+            }
+            return entity;
+    }
+
+    async deleteProvincia(id){
+        var entity = null;
+        try {
+          const sql = `Delete FROM provinces WHERE id=$1`;
+          const values = [id];
+          const result = await this.BDclient.query(sql, values);
+          entity = result.rowsAffected;
+
+        }catch (error) {
+          console.log(error);
+        }
+        return entity;
+    }
+    
+    async insertProvincia(Provincia){
+      let returnEntity=null;
+      try {
+      const sql = `Insert into provinces(name,full_name,latitude,longitude,display_order) values ($1,$2,$3,$4,$5)`;
+      const values = [ Provincia.name , Provincia.full_name , Provincia.latitude , Provincia.longitude , Provincia.display_order ];
+      returnEntity=await this.BDclient.query(sql, values);
+      return "Provincia insertada";
+      }catch (error) {
+      console.log(error);
+      return "Error"
+      }
+      
+    }
+}

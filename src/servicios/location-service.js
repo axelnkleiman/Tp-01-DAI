@@ -1,34 +1,35 @@
-import LocationRepository from "../repositorios/location-repository.js"
-import EventLocationRepository from "../repositorios/eventLocation-repository.js"
-import { Pagination } from "../utils/paginacion.js";
+import { query } from "express";
+import LocationRepository from "../repositorios/location-repository.js";
+import EventLocationRepository from "../repositorios/eventLocation-repository.js";
+import { Pagination } from "../utils/Paginacion.js";
 
-const Paginacion = new Pagination();
-const repository= new LocationRepository();
-const repositoryEventLocation = new EventLocationRepository()
+const PaginacionConfig = new Pagination();
+const repository = new LocationRepository();
+const repositoryEL = new EventLocationRepository()
 
 export class LocationService {
 
-    async getLocalidades(limit, offset) {
-        const parsedLimit = Paginacion.parseLimit(limit);
-        const parsedOffset = Paginacion.parseOffset(offset);
-        const cantidad=Number.parseInt(await repository.cantLocalidades())
-        const paginacion = Paginacion.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/localidad`)
-        const localidades=await repository.getLocalidades(parsedLimit,parsedOffset)
+    async getLocations(limit, offset) {
+        const parsedLimit = PaginacionConfig.parseLimit(limit);
+        const parsedOffset = PaginacionConfig.parseOffset(offset);
+        const cantidad = Number.parseInt(await repository.cantLocations());
+        const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/localidad`);
+        const locations = await repository.getLocations(parsedLimit,parsedOffset);
 
-        const collection={localidades,paginacion}
-        return collection;  
+        const collection={locations,paginacion}
+        return collection;
     }
 
-    async getLocalidadById(id){
-        return await repository.getLocalidadById(id);  
+    async getLocationsById(id){
+        return await repository.getLocationsById(id);  
     }
     
-    async getEventLocationByLocalidad(id,limit,offset){
-        const parsedLimit = Paginacion.parseLimit(limit);
-        const parsedOffset = Paginacion.parseOffset(offset);
-        const cantidad =  Number.parseInt(await repositoryEventLocation.cantEvLocByLocation(id));
-        const paginacion = Paginacion.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/localidad/${id}/event-location`)
-        const EventLocations= await repositoryEventLocation.getEventLocationsByLocation(id,parsedLimit,parsedOffset);
+    async getEventLocationsByLocation(id,limit,offset){
+        const parsedLimit = PaginacionConfig.parseLimit(limit);
+        const parsedOffset = PaginacionConfig.parseOffset(offset);
+        const cantidad =  Number.parseInt(await repositoryEL.cantEventLocationByLocation(id));
+        const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/localidad/${id}/event-location`);
+        const EventLocations= await repositoryEL.getEventLocationsByLocation(id,parsedLimit,parsedOffset);
         const collection={EventLocations,paginacion}
         return collection;
     }
