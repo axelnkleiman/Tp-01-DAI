@@ -11,14 +11,15 @@ export class EventService{
         const eventPorFiltro = await repository.getEventByFilter(Event, parsedLimit, parsedOffset);
         return {eventPorFiltro};
     }
-    
-      async getEventById(id) {
-        return await repository.getEventById(id);
-    }
-    
+
       async getEventEnrollment(enrollment) {
         const eventEnrollment = await repository.getEventEnrollment(enrollment);
         return eventEnrollment;
+    }
+
+    async detalleEvent(id){
+      const detalle = await repository.deleteEvent(id);
+      return detalle;
     }
     
       async patchEvento(Event) {
@@ -26,23 +27,23 @@ export class EventService{
         return "Evento Actualizado correctamente";
     }
     
-      async DeleteEvent(id) {
-       await repository.DeleteEvent(id);
+      async deleteEvent(id) {
+       await repository.deleteEvent(id);
         return "Evento Eliminado correctamente";
     }
     
-      async InscripcionEvento(enrollment) {
-        await repository.InscripcionEvento(enrollment);
+      async inscripcionEvent(enrollment) {
+        await repository.inscripcionEvent(enrollment);
         return "Evento Inscripto correctamente";
     }
     
-      async CambiarRating(id, rating) {
-        await repository.UpdateRating(rating,id);
+      async updateRating(id, rating) {
+        await repository.updateRating(rating,id);
         return "Rating actualizado correctamente";
     }
     
-      async InsertEvento(event) {    
-        await repository.InsertEvent(event);
+      async insertEvent(event) {    
+        await repository.insertEvent(event);
         return "Evento Insertado correctamente";
     }
 }

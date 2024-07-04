@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import {EventLocationService} from "../servicios/eventLocation-service.js";
 import AuthMiddleware from "../auth/authMiddleware.js";
 
@@ -7,11 +7,11 @@ const eventLocationService = new EventLocationService();
 
 router.get("/", AuthMiddleware , async (request, response) => {
     try {
-      const evLocByUser = await evLocService.getEventLocationsByUser(request.user.id);
-      if (evLocByUser!=null) {
-        return response.status(200).json(evLocByUser);
+      const eventLocationByUser = await eventLocationService.getEventLocationsByUser(request.user.id);
+      if (eventLocationByUser!=null) {
+        return response.status(200).json(eventLocationByUser);
       }else{
-        return response.status(401).json("este usuario no creo ninguna event location");
+        return response.status(401).json("El usuario no creo ninguna event location");
       }
     } catch (error) {
       console.log(error);
@@ -22,12 +22,11 @@ router.get("/", AuthMiddleware , async (request, response) => {
 router.get("/:id", AuthMiddleware , async (request, response) => {
     const id = request.params.id;
     try {
-      const evLocById = await eventLocationService.getEventLocationById(id);
-      if (evLocById!=null) {
-        return response.status(200).json(evLocById);
+      const eventLocationById = await eventLocationService.getEventLocationById(id);
+      if (eventLocationById != null) {
+        return response.status(200).json(eventLocationById);
       }else{
         return response.status(401).json("No existe la id");
-  
       }
     } catch (error) {
       console.log(error);
@@ -46,7 +45,7 @@ router.post("/",AuthMiddleware, async (request,response)=>{
     EventLocation.id_creator_user=request.user.id;
 
     try {
-        const respuesta = await eventLocationService.InsertEvLoc(Evento);;
+        const respuesta = await eventLocationService.InsertEventLocation(Evento);;
         return response.json(respuesta);
     } catch (error) {
         console.log(error);
@@ -54,6 +53,5 @@ router.post("/",AuthMiddleware, async (request,response)=>{
     }
 
 });
-
 
 export default router;

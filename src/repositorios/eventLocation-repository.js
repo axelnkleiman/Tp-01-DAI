@@ -64,7 +64,7 @@ export default class EventLocationRepository {
       }
     }
 
-    async UpdateEvLoc(e){
+    async UpdateEventLocation(e){
       try {
         const values = [e.id]
         var sql = `UPDATE event_locations SET`;
@@ -114,7 +114,7 @@ export default class EventLocationRepository {
       }
     }
 
-    async deleteEvLoc(id){
+    async deleteEventLocation(id){
       try{
       var sql = `DELETE FROM event_locations WHERE id=$1`;
       const values=[id]

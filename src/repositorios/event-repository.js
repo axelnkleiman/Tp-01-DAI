@@ -19,7 +19,7 @@ export default class EventRepository {
         }
 
     async getEventByFilter(Event, pageSize, reqPage) {
-        var returnEntity = null;
+        var entity = null;
         try {
         var sql = `SELECT e.name, e.description, ec.name as Category, el.name as Location, e.start_date, e.duration_in_minutes, e.price, e.enabled_for_enrollment, e.max_assistance 
                     FROM events e 
@@ -61,21 +61,19 @@ export default class EventRepository {
         if (sql.endsWith(" where ")) {
             sql = sql.slice(0, -7);
         }
-        
         sql += " group by e.id, e.description, e.name,ec.name,el.name,e.start_date, e.duration_in_minutes, e.price, e.enabled_for_enrollment, e.max_assistance order by e.id asc limit $1 offset $2 ";
-
         const result = await this.BDclient.query(sql, values);
 
         if (result.rows.length > 0) {
-            returnEntity = result.rows;
+            entity = result.rows;
         }
         } catch (error) {
         console.log(error);
         }
-        return returnEntity;
+        return entity;
     }
 
-    async DetallarEvent(id) {
+    async detalleEvent(id) {
         let entity = null;
         try {
         var sql = `SELECT e.name, e.description, ec.name as Category, el.name as Location, e.start_date, e.duration_in_minutes, e.price, e.enabled_for_enrollment, e.max_assistance 
@@ -108,9 +106,9 @@ export default class EventRepository {
         var index = 2;
         const values = [enrollment.event_id];
 
-        if (enrollment.nombreEv != null) {
+        if (enrollment.nombreEvent != null) {
                 sql += ` ev.name=$${index} and`;
-                values.push(enrollment.nombreEv)
+                values.push(enrollment.nombreEvent)
                 index++;
         }
         if (enrollment.firstName != null) {
@@ -152,7 +150,6 @@ export default class EventRepository {
         } catch (error) {
         console.log(error);
         }
-
         return entity;
     }
 
@@ -218,7 +215,7 @@ export default class EventRepository {
         }
     }
 
-    async DeleteEvent(id) {
+    async deleteEvent(id) {
         try {
         const sql = `Delete FROM events WHERE id=$1`;
         const values = [id];
@@ -229,7 +226,7 @@ export default class EventRepository {
         }
     }
 
-    async InscripcionEvent(enrollment) {
+    async inscripcionEvent(enrollment) {
         try {
         var sql = ""
         if (enrollment.enabled) {
@@ -244,7 +241,7 @@ export default class EventRepository {
         }
     }
 
-    async UpdateRating(rating,id) {
+    async updateRating(rating,id) {
         try {
         const sql = `UPDATE event_enrollments SET rating=$1 WHERE id=$2`;
         const values = [rating,id];
@@ -255,7 +252,7 @@ export default class EventRepository {
         }
     } 
 
-    async InsertEvent(Event) {
+    async insertEvent(Event) {
         try {
         const sql = `INSERT INTO events(name,description,id_event_category,id_event_location,start_date,duration_in_minutes,price,enabled_for_enrollment,max_assistance, id_creator_user) values ($1,$9,$2,$3,$4,$5,$6,$7,$8, $10)`;
         const values = [Event.name ,Event.id_event_category, Event.id_event_location, Event.start_date, Event.duration_in_minutes, Event.price, Event.enabled_for_enrollment, Event.max_assistance, Event.description, Event.id_creator_user];

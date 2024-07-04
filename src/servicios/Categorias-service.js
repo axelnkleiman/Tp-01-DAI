@@ -22,7 +22,7 @@ export class CategoryService{
         return repository.getCategoryById(id);
     }
     
-    async (Category){
+    async insertCategory(Category){
         repository.insertCategory(Category);
         return "Categoria insertada correctamente";
     }

@@ -1,5 +1,5 @@
 import express from "express";
-import {EventService} from "../servicios/event-service.js";
+import { EventService } from "../servicios/event-service.js";
 import AuthMiddleware from "../auth/authMiddleware.js";
 
 const router = express.Router();
@@ -38,7 +38,7 @@ router.get("/" , async (request, response) => {
 router.delete("/:id", AuthMiddleware , async (req, res) => {
   const id = request.params.id;
   try {
-    await eventService.DeleteEvent(id);
+    await eventService.deleteEvent(id);
     return response.send("Borradisimo");4
   } catch (error) {
     console.log(error);
@@ -60,7 +60,7 @@ router.post("/",AuthMiddleware, async (request, response) => {
   Event.id_creator_user = request.user.id;
   
   try {
-    const respuesta = await eventService.InsertEvento(Event);
+    const respuesta = await eventService.insertEvent(Event);
     return response.json(respuesta);
   } catch (error) {
     console.log(error);
@@ -90,11 +90,11 @@ router.put("/",AuthMiddleware, async (request, response) => {
 router.get("/:id", async (request, response) => {
   const id = request.params.id;
   try {
-    const eventById = await eventService.getEventById(id);
-    if (eventById!=null) {
-      return response.status(200).json(eventById);
+    const detalleEvent = await eventService.detalleEvent(id);
+    if (detalleEvent!=null) {
+      return response.status(200).json(detalleEvent);
     }else{
-      return response.status(401).json("No se encuentra el id");
+      return response.status(404).json("No se encuentra el id");
     }
   } catch (error) {
     console.log(error);
@@ -133,7 +133,7 @@ router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
   enrollment.enabled = event.enabled_for_enrollment
 
   try {
-    await eventService.InscripcionEvento(enrollment);
+    await eventService.inscripcionEvent(enrollment);
     return response.json("Inscripto en el evento cheto");
   } catch (error) {
     console.log(error);
@@ -145,7 +145,7 @@ router.put("/:id/enrollment",AuthMiddleware,async (request, response) => {
   const id = request.params.id;
   const rating = request.query.rating;
   try {
-    const mensaje = await eventService.CambiarRating(id, rating);
+    const mensaje = await eventService.updateRating(id, rating);
     return response.status(200).send(mensaje);
   } catch (error) {
     console.log(error);

@@ -9,7 +9,7 @@ router.get("/", async (request, response) => {
     const limit = request.query.limit;
     const offset = request.query.offset;
     try {
-      const category = await categoryService.getCategory(limit,offset);
+      const category = await categoryService.getCategories(limit,offset);
       return response.status(200).json(category);
     } catch (error) {
       console.log(error);
@@ -26,7 +26,6 @@ router.get("/", async (request, response) => {
       category.display_order = request.query.display_order;
 
       if ((category.name != null || category.display_order || null)) {
-        
       }
         return response.status(200).json(categoryById);
       }else{
@@ -45,7 +44,7 @@ router.get("/", async (request, response) => {
     
     if (Category.name != null) {
       try {
-        const respuesta = await categoryService.insertCategory(Category);;
+        const respuesta = await categoryService.insertCategory(Category);
         return response.status(201).json(respuesta);
       } catch (error) {
         console.log(error);
@@ -62,7 +61,7 @@ router.get("/", async (request, response) => {
 
     if ((category.name != null || category.display_order || null) && category.id != null) {
       try {
-        const respuesta = await categoryService.updateCategoria(category);
+        const respuesta = await categoryService.updateCategory(category);
         return response.status(200).json(respuesta);
       } catch (error) {
         return response.status(400).json(error);
