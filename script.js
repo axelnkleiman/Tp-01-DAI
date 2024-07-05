@@ -10,12 +10,12 @@ const app = express();
 app.use(express.json()); 
 const port = 3000;
 
-app.use("api/event", EventController);
-app.use("api/user", UserController);
-app.use("api/provincia", ProvinciaController);
-app.use("api/location", LocationController);
-app.use("api/categories", CategoriaController);
-app.use("api/eventLocation", EventLocationController);
+app.use("/api/event", EventController);
+app.use("/api/user", UserController);
+app.use("/api/provincia", ProvinciaController);
+app.use("/api/location", LocationController);
+app.use("/api/categories", CategoriaController);
+app.use("/api/eventLocation", EventLocationController);
 
 
 app.listen(port, () => {

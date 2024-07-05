@@ -1,5 +1,5 @@
 import UserRepository from "../repositorios/user-repository.js";
-import login from "../auth/login.js";
+import login from "../auth/token.js";
 const repository = new UserRepository();
 
 const ListadoUsers = {
