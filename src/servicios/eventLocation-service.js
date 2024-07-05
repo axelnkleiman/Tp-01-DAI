@@ -1,7 +1,7 @@
 import EventLocationRepository from "../repositorios/eventLocation-repository.js";
-import { Pagination } from "../utils/Paginacion.js";
+import {Paginacion, PaginationDto} from "../utils/paginacion.js";
 
-const PaginacionConfig = new Pagination();
+const PaginacionConfig = new Paginacion();
 const repository = new EventLocationRepository()
 
 export class EventLocationService{

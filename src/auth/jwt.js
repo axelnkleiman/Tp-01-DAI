@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 export default async function encriptartoken(token) {
-  const secretKey = "Huevo2007";
   let payloadOriginal = null;
 
   try {

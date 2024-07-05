@@ -1,8 +1,8 @@
 import EventRepository from "../repositorios/event-repository.js";
-import { Pagination } from "../utils/Paginacion.js";
-const repository = new EventRepository();
+import {Paginacion, PaginationDto} from "../utils/paginacion.js";
 
-const pagination = new Pagination();
+const repository = new EventRepository();
+const pagination = new Paginacion();
 
 export class EventService{
     async getAllEvents(Event, pageSize, reqPage){

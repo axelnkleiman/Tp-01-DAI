@@ -34,7 +34,7 @@ export default class LocationRepository {
      return entity;
     }
     
-    async getLocationById(id){
+    async getLocationsById(id){
         let entity = null;
         try {
         var sql = `SELECT * FROM locations WHERE id=$1`;

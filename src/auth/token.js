@@ -1,4 +1,4 @@
-import jwt from "./jwt.js";
+import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 export default async function generarToken(usuario) {
@@ -10,5 +10,6 @@ export default async function generarToken(usuario) {
     const payload = {"id":usuario.id};
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, options);
+    console.log(token)
     return token;
 }

@@ -8,7 +8,8 @@ router.post("/login", async (request, response) => {
   const pass = request.body.password;
   const user = request.body.username;
   try {
-    const token = await userService.login(user, pass);
+    
+    const token = await userService.generarToken(user, pass);
     if(token!="Usuario y/o Contraseña inexistentes"){
     return response.status(200).json({
       "succes":true,

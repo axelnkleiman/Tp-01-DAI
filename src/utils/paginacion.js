@@ -9,7 +9,7 @@ export class PaginationDto {
   total;
 }
 
-export class Pagination {
+export class Paginacion {
   limitRegex = /limit=\d+/;
   offsetRegex = /offset=\d+/;
 

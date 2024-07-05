@@ -1,7 +1,7 @@
 import CategoryRepository from "../repositorios/categorias-repository.js"
-import { Pagination } from "../utils/Paginacion.js";
+import {Paginacion, PaginationDto} from "../utils/paginacion.js";
 
-const PaginacionConfig = new Pagination();
+const PaginacionConfig = new Paginacion();
 const repository= new CategoryRepository();
 
 export class CategoryService{
@@ -27,12 +27,12 @@ export class CategoryService{
     }
 
     async updateCategory(category){
-        repository.updateCategoria(category);
+        repository.updateCategory(category);
         return "Categoria actualizada correctamente";
     }
 
-    async deleteCategoria(id){
-        repository.deleteCategoria(id);
+    async deleteCategory(id){
+        repository.deleteCategory(id);
         return "Categoria eliminada correctamente";
     }
 }

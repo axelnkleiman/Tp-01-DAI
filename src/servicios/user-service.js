@@ -9,6 +9,7 @@ export class UserService {
     const usuario= await this.getUserByPayload(user, pass)
     if(usuario!=null){
       const token =await generarToken(usuario)
+      console.log(usuario)
       return token; 
     }else{
       return "Usuario y/o Contraseña inexistentes";

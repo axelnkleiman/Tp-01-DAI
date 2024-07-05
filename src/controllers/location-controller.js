@@ -23,7 +23,7 @@ router.get("/:id", async (request, response) => {
   const id = request.params.id;
   console.log(id);
   try {
-    const locationById = await locationService.getLocalidadById(id);
+    const locationById = await locationService.getLocationsById(id);
     if (locationById!=null) {
       return response.status(200).json(locationById);
     }else{

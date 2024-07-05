@@ -1,10 +1,10 @@
 import ProvinciaRepository from "../repositorios/provincia-repository.js";
 import LocationRepository from "../repositorios/location-repository.js";
-import { Pagination } from "../utils/Paginacion.js";
+import {Paginacion, PaginationDto} from "../utils/paginacion.js";
 
 const repository = new ProvinciaRepository();
 const locationRepository = new LocationRepository();
-const PaginacionConfig = new Pagination();
+const PaginacionConfig = new Paginacion();
 
 export class ProvinciaService {
   async getProvincias(pageSize, reqPage) {
