@@ -60,6 +60,7 @@ router.post("/",AuthMiddleware, async (request, response) => {
   Event.id_creator_user = request.user.id;
   
   try {
+    console.log(Event.max_assistence)
     const respuesta = await eventService.insertEvent(Event);
     return response.json(respuesta);
   } catch (error) {

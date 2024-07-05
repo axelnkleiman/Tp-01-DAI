@@ -14,11 +14,11 @@ export class Paginacion {
   offsetRegex = /offset=\d+/;
 
   parseLimit(limit) {
-    return !isNaN(parseInt(limit)) ? parseInt(limit) : 1;
+    return !isNaN(parseInt(limit)) ? parseInt(limit) : 5; // Cambie a 5
   }
 
   parseOffset(offset) {
-    return !isNaN(parseInt(offset)) ? parseInt(offset) : 0;
+    return !isNaN(parseInt(offset)) ? parseInt(offset) : 0; 
   }
 
   buildPaginationDto(limit, currentOffset, total, path) {
@@ -28,16 +28,17 @@ export class Paginacion {
     response.total = total;
     if (limit !== -1) {
       response.nextPage =
-        limit + currentOffset*limit < total
+        limit * (currentOffset + 1) < total 
           ? this.buildNextPage(path, limit, currentOffset)
           : null;
     }
-
     return response;
   }
 
   buildNextPage(path, limit, currentOffset) {
     let url = BASE_URL + path;
+    const nextOffset = currentOffset + limit;
+
     if (this.limitRegex.test(url)) {
       url = url.replace(this.limitRegex, `limit=${limit}`);
     } else {
@@ -45,11 +46,9 @@ export class Paginacion {
     }
 
     if (this.offsetRegex.test(url)) {
-      url = url.replace(this.offsetRegex, `offset=${currentOffset + 1}`);
+      url = url.replace(this.offsetRegex, `offset=${nextOffset}`);
     } else {
-      url = `${url}${url.includes("?") ? "&" : "?"}offset=${
-        currentOffset + 1
-      }`;
+      url = `${url}${url.includes("?") ? "&" : "?"}offset=${nextOffset}`;
     }
 
     return url;

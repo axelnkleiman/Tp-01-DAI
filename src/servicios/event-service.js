@@ -49,7 +49,7 @@ export class EventService{
         return "Rating actualizado correctamente";
     }
     
-      async insertEvent(event) {    
+      async insertEvent(event) {   
         await repository.insertEvent(event);
         return "Evento Insertado correctamente";
     }

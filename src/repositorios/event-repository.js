@@ -256,7 +256,8 @@ export default class EventRepository {
         try {
         const sql = `INSERT INTO events(name,description,id_event_category,id_event_location,start_date,duration_in_minutes,price,enabled_for_enrollment,max_assistance, id_creator_user) values ($1,$9,$2,$3,$4,$5,$6,$7,$8, $10)`;
         const values = [Event.name ,Event.id_event_category, Event.id_event_location, Event.start_date, Event.duration_in_minutes, Event.price, Event.enabled_for_enrollment, Event.max_assistance, Event.description, Event.id_creator_user];
-        await this.BDclient.query(sql, values);
+        const respuesta = await this.BDclient.query(sql, values);
+        console.log(respuesta);
         } catch (error) {
         console.log(error);
         }
