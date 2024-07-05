@@ -29,7 +29,7 @@ const ListadoUsers = {
   ],
 };
 
-export class UsuarioService {
+export class UserService {
   async login(user, pass) {
     try{
     const usuario= await this.getUserByPayload(user,pass)

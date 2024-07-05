@@ -1,11 +1,11 @@
-import pg from "pg"
-import { BDconfig } from "../configs/BD.js"
+import pg from "pg";
+import { BDConfig } from "../DB/db.js";
 
 export default class UserRepository{
 
     constructor(){
         const {Client}=pg;
-        this.BDclient=new Client(BDconfig)
+        this.BDclient=new Client(BDConfig)
         this.BDclient.connect();
     }
 
@@ -24,7 +24,6 @@ export default class UserRepository{
             }
             return entity;
     }
-
 
     async getUserByName(user,pass){
         let entity = null;

@@ -1,61 +1,61 @@
 import express from "express";
-import {UserService} from "../servicios/user-service.js";
-import AuthMiddleware from "../auth/authMiddleware.js";
+import UserService from "../servicios/user-service.js"
 
 const router = express.Router();
 const userService = new UserService();
 
-router.get("/event_enrollments", (request, response) =>{
-    const pageSize = request.query.pageSize;
-    const page = request.query.page;
-    const first_name = request.query.first_name;
-    const last_name = request.query.last_name;
-    const username = request.query.username;
-    const attended = request.query.attended;
-
-    try{
-        userService.getUserConFiltro(pageSize, page, first_name, last_name, username, attended)
-    } catch (error){
-        console.log("ERROR");
-        return response.json("ERROR");
+router.post("/login", async (request, response) => {
+  const pass = request.body.password;
+  const user = request.body.username;
+  try {
+    const token = await userService.login(user, pass);
+    if(token!="Usuario y/o Contraseña inexistentes"){
+    return res.status(200).json({
+      "succes":true,
+      "message":"Has iniciado sesion",
+      "token":token});
+    }else{
+      return res.status(401).json({
+        "succes":false,
+        "message":"Logueado correctamente",
+        "token":""});
     }
+  } catch (error) {
+    return res.json(error);
+  }
 });
 
-router.post("/login", (request, response) =>{
-    const body = request.body;
-    return response.status(201).send({
-        username: body.username,
-        password: body.password
-    })
-});
-router.post("/register", (request, response) =>{
-    const body = request.body;
-    return response.status(201).send({
-        first_name: body.first_name,
-        last_name: body.last_name,
-        username: body.username,
-        password: body.password,
-    })
+router.post("/register", async (request, response) => {
+  const user = {};
+  user.first_name = request.body.first_name;
+  user.last_name = request.body.last_name;
+  user.username = request.body.username;
+  user.password = request.body.password;
+
+  const mailish = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  try {
+    if (user.first_name!=null && user.last_name!=null && user.password!=null && user.username!=null) {
+
+      if(user.first_name.length>=3 && user.last_name.length>=3 && user.password.length>=3){
+
+        if(mailish.test(user.username)){
+          
+           await userService.register(user);
+           return response.status(201).send("Mail registrado");
+  
+        }else{
+          return response.status(400).json("Mail incorrecto");
+        }
+      }else{
+        return response.status(400).json("Nombre, apellido y contraseña deben tener más de 3 caracteres");
+      }
+    }else{
+      return response.status(400).json("Error, datos incompletos");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json(error);
+  }
 });
 
-router.post("/login", AuthMiddleware, (request, response) =>{
-    const body = request.body;
-    return response.status(201).send({
-        username: body.username,
-        password: body.password
-    })
-});
-router.post("/register", AuthMiddleware, (request, response) =>{
-    const body = request.body;
-    return response.status(201).send({
-        first_name: body.first_name,
-        last_name: body.last_name,
-        username: body.username,
-        password: body.password,
-    })
-});
-
-router.post("/event/{id}/enrollment/", AuthMiddleware, (request, response) =>{
-
-})
 export default router;
