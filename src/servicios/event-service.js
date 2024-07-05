@@ -8,8 +8,8 @@ export class EventService{
     async getEventByFilter(Event, pageSize, reqPage) {
         const parsedLimit = pagination.parseLimit(pageSize);
         const parsedOffset = pagination.parseOffset(reqPage);
-        const eventPorFiltro = await repository.getEventByFilter(Event, parsedLimit, parsedOffset);
-        return {eventPorFiltro};
+        const filtros = await repository.getEventByFilter(Event, parsedLimit, parsedOffset);
+        return {filtros};
     }
 
       async getEventEnrollment(enrollment) {

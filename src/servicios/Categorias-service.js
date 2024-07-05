@@ -1,4 +1,3 @@
-import { query } from "express";
 import CategoryRepository from "../repositorios/categorias-repository.js"
 import { Pagination } from "../utils/Paginacion.js";
 

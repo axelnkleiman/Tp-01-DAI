@@ -39,7 +39,7 @@ router.delete("/:id", AuthMiddleware , async (req, res) => {
   const id = request.params.id;
   try {
     await eventService.deleteEvent(id);
-    return response.send("Borradisimo");4
+    return response.send("Se ha borrado con exito");
   } catch (error) {
     console.log(error);
     return response.json(error);
@@ -134,7 +134,7 @@ router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
 
   try {
     await eventService.inscripcionEvent(enrollment);
-    return response.json("Inscripto en el evento cheto");
+    return response.json("Inscripto correctamente");
   } catch (error) {
     console.log(error);
     return response.json(error);
