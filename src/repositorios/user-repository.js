@@ -2,7 +2,6 @@ import pg from "pg";
 import { BDConfig } from "../DB/db.js";
 
 export default class UserRepository{
-
     constructor(){
         const {Client}=pg;
         this.BDclient=new Client(BDConfig)
@@ -48,4 +47,4 @@ export default class UserRepository{
             console.log(error)
         }
     }
-}
+};

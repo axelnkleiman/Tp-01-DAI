@@ -1,47 +1,21 @@
 import UserRepository from "../repositorios/user-repository.js";
-import login from "../auth/token.js";
+import generarToken from "../auth/token.js";
+
 const repository = new UserRepository();
 
-const ListadoUsers = {
-  collection: [
-    {
-      user: {
-        id: 1,
-        username: "LeoMessi",
-        first_name: "Lionel",
-        last_name: "Messi",
-      },
-      attended: true,
-      rating: 3,
-      description: "bueno",
-    },
-    {
-      user: {
-        id: 2,
-        username: "JRR10",
-        first_name: "JuanRoman",
-        last_name: "Riquelme",
-      },
-      attended: false,
-      rating: null,
-      description: null,
-    },
-  ],
-};
-
 export class UserService {
-  async login(user, pass) {
+  async generarToken(user, pass) {
     try{
-    const usuario= await this.getUserByPayload(user,pass)
+    const usuario= await this.getUserByPayload(user, pass)
     if(usuario!=null){
-      const token =await login(usuario)
-      return token;
+      const token =await generarToken(usuario)
+      return token; 
     }else{
       return "Usuario y/o Contraseña inexistentes";
     }
     }catch(error){
       console.log(error);
-      return res.json(error);
+      return response.json(error);
     }
   }
 

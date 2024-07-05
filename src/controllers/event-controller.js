@@ -48,15 +48,15 @@ router.delete("/:id", AuthMiddleware , async (request, response) => {
 
 router.post("/",AuthMiddleware, async (request, response) => {
   const Event = {};
-  Event.name = request.query.name;
-  Event.description = request.query.description;
-  Event.id_event_category = request.query.id_event_category;
-  Event.id_event_location = request.query.id_event_location;
-  Event.start_date = request.query.start_date;
-  Event.duration_in_minutes = request.query.duration_in_minutes;
-  Event.price = request.query.price;
-  Event.enabled_for_enrollment = request.query.enabled_for_enrollment;
-  Event.max_assistance = request.query.max_assistance;
+  Event.name = request.body.name;
+  Event.description = request.body.description;
+  Event.id_event_category = request.body.id_event_category;
+  Event.id_event_location = request.body.id_event_location;
+  Event.start_date = request.body.start_date;
+  Event.duration_in_minutes = request.body.duration_in_minutes;
+  Event.price = request.body.price;
+  Event.enabled_for_enrollment = request.body.enabled_for_enrollment;
+  Event.max_assistance = request.body.max_assistance;
   Event.id_creator_user = request.user.id;
   
   try {
@@ -70,14 +70,14 @@ router.post("/",AuthMiddleware, async (request, response) => {
 
 router.put("/",AuthMiddleware, async (request, response) => {
   const Event = {};
-  Event.name = request.query.name;
-  Event.description = request.query.description;
-  Event.start_date = request.query.start_date;
-  Event.duration_in_minutes = request.query.duration_in_minutes;
-  Event.price = request.query.price;
-  Event.enabled_for_enrollment = request.query.enabled_for_enrollment;
-  Event.max__assistance = request.query.max__assistance;
-  Event.id = request.query.id;
+  Event.name = request.body.name;
+  Event.description = request.body.description;
+  Event.start_date = request.body.start_date;
+  Event.duration_in_minutes = request.body.duration_in_minutes;
+  Event.price = request.body.price;
+  Event.enabled_for_enrollment = request.body.enabled_for_enrollment;
+  Event.max__assistance = request.body.max__assistance;
+  Event.id = request.body.id;
   try {
     const respuesta = await eventService.patchEvento(Event);
     return response.json(respuesta);
@@ -125,10 +125,10 @@ router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
   const enrollment = {};
   const event = await eventService.getEventById(request.params.id)
   enrollment.id = request.params.id;
-  enrollment.attended = request.query.attended;
-  enrollment.rating = request.query.rating;
-  enrollment.descripcion = request.query.descripcion;
-  enrollment.observations = request.query.observations;
+  enrollment.attended = request.body.attended;
+  enrollment.rating = request.body.rating;
+  enrollment.descripcion = request.body.descripcion;
+  enrollment.observations = request.body.observations;
   enrollment.user_id = request.user.id; 
   enrollment.enabled = event.enabled_for_enrollment
 

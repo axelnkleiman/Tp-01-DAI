@@ -18,13 +18,13 @@ router.post("/", (request, response) => {
 });
 
 router.get("/", (request, response) =>{
-    const pageSize = request.query.pageSize;
-    const page = request.query.page;
-    const name = request.query.name;
-    const full_name = request.query.full_name;
-    const latitude = request.query.latitude;
-    const longitude = request.query.longitude;
-    const display_order = request.query.display_order;
+    const pageSize = request.body.pageSize;
+    const page = request.body.page;
+    const name = request.body.name;
+    const full_name = request.body.full_name;
+    const latitude = request.body.latitude;
+    const longitude = request.body.longitude;
+    const display_order = request.body.display_order;
 
     try{
         provinciaService.getProvincias(pageSize, page, name, full_name, latitude, longitude, display_order);

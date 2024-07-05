@@ -7,11 +7,7 @@ export default async function generarToken(usuario) {
         issuer: "axelnk.facumy",
     };
 
-    const payload = {
-        id: usuario.id,
-        username: usuario.username,
-    };
-
+    const payload = {"id":usuario.id};
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, options);
     return token;
