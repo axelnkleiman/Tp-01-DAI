@@ -1,6 +1,6 @@
 import express from "express";
 import {LocationService} from "../servicios/location-service.js";
-import AuthMiddleware from "../auth/authMiddleware.js";
+import AuthMiddleware from "../auth/authmiddleware.js";
 
 const locationService = new LocationService();
 

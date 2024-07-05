@@ -1,6 +1,6 @@
 import express from "express";
 import { EventService } from "../servicios/event-service.js";
-import AuthMiddleware from "../auth/authMiddleware.js";
+import AuthMiddleware from "../auth/authmiddleware.js";
 
 const router = express.Router();
 const eventService = new EventService();
