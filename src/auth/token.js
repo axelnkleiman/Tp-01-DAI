@@ -10,6 +10,5 @@ export default async function generarToken(usuario) {
     const payload = {"id":usuario.id};
 
     const token = jwt.sign(payload, process.env.SECRET_KEY, options);
-    console.log(token)
     return token;
 }
