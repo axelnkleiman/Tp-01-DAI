@@ -1,6 +1,5 @@
 import pg from "pg";
 import { BDConfig } from "../DB/db.js";
-import e from "express";
 
 export default class EventLocationRepository {
     constructor() {

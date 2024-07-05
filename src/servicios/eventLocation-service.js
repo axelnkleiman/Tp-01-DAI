@@ -1,4 +1,3 @@
-import { query } from "express";
 import EventLocationRepository from "../repositorios/eventLocation-repository.js";
 import { Pagination } from "../utils/Paginacion.js";
 

@@ -1,5 +1,5 @@
 import pg from "pg"
-import {BDconfig} from "../configs/BD.js"
+import { BDconfig } from "../configs/BD.js"
 
 export default class UserRepository{
 

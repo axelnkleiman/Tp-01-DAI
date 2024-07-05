@@ -1,4 +1,3 @@
-import { query } from "express";
 import ProvinciaRepository from "../repositorios/provincia-repository.js";
 import LocationRepository from "../repositorios/location-repository.js";
 import { Pagination } from "../utils/Paginacion.js";
