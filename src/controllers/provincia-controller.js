@@ -27,7 +27,7 @@ router.get("/", (request, response) =>{
     const display_order = request.query.display_order;
 
     try{
-        const provincia = provinciaService.getProvincia(pageSize, page, name, full_name, latitude, longitude, display_order);
+        provinciaService.getProvincia(pageSize, page, name, full_name, latitude, longitude, display_order);
     } catch (error){
         console.log("ERROR");
         return response.json("ERROR");

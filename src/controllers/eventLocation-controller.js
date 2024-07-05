@@ -1,4 +1,4 @@
-import express, { response } from "express";
+import express from "express";
 import {EventLocationService} from "../servicios/eventLocation-service.js";
 import AuthMiddleware from "../auth/authMiddleware.js";
 

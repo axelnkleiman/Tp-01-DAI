@@ -21,7 +21,7 @@ export class ProvinciaService {
     return await repository.getProvinciaById(id);
   }
 
-  async InsertProvincia(Provincia) {
+  async insertProvincia(Provincia) {
     return await repository.insertProvincia(Provincia);
   }
 
@@ -30,8 +30,8 @@ export class ProvinciaService {
   }
 
   async DeleteProvincia(id) {
-    const localidades=((await this.getLocationByProvincia(id,1,0)).localidades);
-    if (localidades==null) {
+    const locations = ((await this.getLocationByProvincia(id,1,0)).localidades);
+    if (locations == null) {
        await repository.deleteProvincia(id);
        return true;
     }else{
@@ -39,7 +39,7 @@ export class ProvinciaService {
     }
   }
 
-  async getLocalidadesByProvincia(id_provincia,limit,offset){
+  async getLocationsByProvincia(id_provincia,limit,offset){
     const parsedLimit = PaginacionConfig.parseLimit(limit) 
     const parsedOffset = PaginacionConfig.parseOffset(offset)
     const cantidad =  Number.parseInt(await locationRepository.cantLocations());

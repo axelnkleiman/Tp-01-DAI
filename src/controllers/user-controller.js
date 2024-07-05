@@ -14,7 +14,7 @@ router.get("/event_enrollments", (request, response) =>{
     const attended = request.query.attended;
 
     try{
-        const users = userService.getUserConFiltro(pageSize, page, first_name, last_name, username, attended)
+        userService.getUserConFiltro(pageSize, page, first_name, last_name, username, attended)
     } catch (error){
         console.log("ERROR");
         return response.json("ERROR");
@@ -38,14 +38,14 @@ router.post("/register", (request, response) =>{
     })
 });
 
-router.post("/api/login", AuthMiddleware, (request, response) =>{
+router.post("/login", AuthMiddleware, (request, response) =>{
     const body = request.body;
     return response.status(201).send({
         username: body.username,
         password: body.password
     })
 });
-router.post("/api/register", AuthMiddleware, (request, response) =>{
+router.post("/register", AuthMiddleware, (request, response) =>{
     const body = request.body;
     return response.status(201).send({
         first_name: body.first_name,
@@ -55,7 +55,7 @@ router.post("/api/register", AuthMiddleware, (request, response) =>{
     })
 });
 
-router.post("/api/event/{id}/enrollment/", AuthMiddleware, (request, response) =>{
+router.post("/event/{id}/enrollment/", AuthMiddleware, (request, response) =>{
 
 })
 export default router;

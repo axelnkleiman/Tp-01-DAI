@@ -4,15 +4,15 @@ import { BDConfig } from "../DB/db.js";
 export default class ProvinciaRepository{
     constructor(){
         const {Client}=pg;
-        this.BDclient=new Client(BDConfig)
+        this.BDclient=new Client(BDConfig);
         this.BDclient.connect();
     }
 
     async cantProvincias(){
       try {
-        var sql = "SELECT COUNT(*) FROM provinces"
-        const result = await this.BDclient.query(sql)
-        return result.rows[0].count
+        var sql = "SELECT COUNT(*) FROM provinces";
+        const result = await this.BDclient.query(sql);
+        return result.rows[0].count;
       } catch (error) {
         return error;
       }
@@ -109,16 +109,15 @@ export default class ProvinciaRepository{
     }
     
     async insertProvincia(Provincia){
-      let returnEntity=null;
+      let entity = null;
       try {
       const sql = `Insert into provinces(name,full_name,latitude,longitude,display_order) values ($1,$2,$3,$4,$5)`;
       const values = [ Provincia.name , Provincia.full_name , Provincia.latitude , Provincia.longitude , Provincia.display_order ];
-      returnEntity=await this.BDclient.query(sql, values);
-      return "Provincia insertada";
+      entity = await this.BDclient.query(sql, values);
+      return "Provincia insertada correctamente";
       }catch (error) {
       console.log(error);
-      return "Error"
+      return "Error";
       }
-      
     }
-}
+};

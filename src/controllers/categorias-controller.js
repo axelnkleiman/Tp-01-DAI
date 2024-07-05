@@ -1,6 +1,6 @@
 import express from "express";
 import { CategoryService } from "../servicios/Categorias-service.js";
-import AuthMiddleware from "../auth/authmiddleware.js";
+import AuthMiddleware from "../auth/authMiddleware.js";
 
 const categoryService = new CategoryService();
 const router = express.Router();

@@ -106,7 +106,7 @@ export default class EventLocationRepository {
         if (sql.endsWith(",")) {
           sql = sql.slice(0, -1);
         }
-        sql += " where id=$1"
+        sql += " WHERE id=$1"
         await this.BDclient.query(sql,values);   
       } catch (error) {
         console.log(error);

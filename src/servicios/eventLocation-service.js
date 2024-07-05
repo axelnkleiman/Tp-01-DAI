@@ -8,7 +8,7 @@ export class EventLocationService{
     async getEventLocationsByUser(id,limit,offset){
         const parsedLimit = PaginacionConfig.parseLimit(limit);
         const parsedOffset = PaginacionConfig.parseOffset(offset);
-        const cantidad =  Number.parseInt(await repo.cantEventLocations(id));
+        const cantidad =  Number.parseInt(await repository.cantEventLocations(id));
         const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, "/event-location")
         const eventLocation= await repository.getEventLocationsByUser(id,parsedLimit,parsedOffset);
 
