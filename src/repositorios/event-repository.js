@@ -17,6 +17,16 @@ export default class EventRepository {
                 return error;
             }
         }
+        async getAllEvents(limit, offset) {
+            try {
+                var sql = "SELECT * FROM events ORDER BY id ASC LIMIT $1 OFFSET $2";
+                const values = [limit, offset];
+                const result = await this.BDclient.query(sql, values);
+                return result.rows;
+                } catch (error) {
+                    return error;
+                }
+            }
 
     async getEventByFilter(Event, pageSize, reqPage) {
         var entity = null;
@@ -219,8 +229,8 @@ export default class EventRepository {
         try {
         const sql = `Delete FROM events WHERE id=$1`;
         const values = [id];
-        await this.BDclient.query(sql, values);
-
+        const result = await this.BDclient.query(sql, values);
+        console.log(result)
         } catch (error) {
         console.log(error);
         }
@@ -262,4 +272,34 @@ export default class EventRepository {
         console.log(error);
         }
     }  
+    async getEvent_TagsById(id){
+        var entity=null
+        try{
+            const sql="SELECT * FROM event_tags WHERE id_event=$1"
+            const values=[id]
+            const result= await this.BDclient.query(sql,values);
+        if (result.rows.length>0) {
+          entity=result.rows;
+        }
+        }catch(error){
+          console.log(error);
+        }
+        return entity;
+
+      }
+
+      async getEvent_EnrollmentById(id){
+        var entity=null
+        try{
+            const sql="SELECT * FROM event_enrrolments WHERE id_event=$1";
+            const values=[id];
+            const result= await this.BDclient.query(sql,values);
+        if (result.rows.length>0) {
+          entity=result.rows;
+        }
+        }catch(error){
+          console.log(error);
+        }
+        return entity;
+      }
 }

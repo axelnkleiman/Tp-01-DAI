@@ -22,14 +22,14 @@ router.get("/" , async (request, response) => {
   Event.tag = request.query.tag;
   
   try {
-    if (esFecha(Event.startDate) || Event.startDate == undefined) {
-      const allEvents = await eventService.getEventByFilter(Event, limit, offset);
+    /*if (esFecha(Event.startDate) || Event.startDate == undefined) {*/
+      const allEvents = await eventService.getAllEvents(limit, offset);
       console.log(allEvents);
       return response.send(allEvents);
-    } else {
+    } /*else {
       return response.json("error en los filtros");
     }
-  } catch (error) {
+  }*/ catch (error) {
     console.log(error);
     return response.json("a");
   }
@@ -38,8 +38,16 @@ router.get("/" , async (request, response) => {
 router.delete("/:id", AuthMiddleware , async (request, response) => {
   const id = request.params.id;
   try {
-    await eventService.deleteEvent(id);
-    return response.send("Se ha borrado con exito");
+    const tags = await eventService.getEvent_TagsById(id);
+    const enrollment = await eventService.getEvent_EnrollmentById(id);
+    console.log(tags)
+    console.log(enrollment)
+    if(tags == null && enrollment == null){
+      await eventService.deleteEvent(id);
+      return response.send("Se elimino correctamente")
+    }else{
+      return response.send("Este evento tiene tags y/o enrollments");
+    }
   } catch (error) {
     console.log(error);
     return response.json(error);
@@ -50,17 +58,18 @@ router.post("/",AuthMiddleware, async (request, response) => {
   const Event = {};
   Event.name = request.body.name;
   Event.description = request.body.description;
-  Event.id_event_category = request.body.id_event_category;
-  Event.id_event_location = request.body.id_event_location;
+  Event.id_event_category = request.body.id_event_category
+  Event.id_event_location = request.body.id_event_location
   Event.start_date = request.body.start_date;
   Event.duration_in_minutes = request.body.duration_in_minutes;
   Event.price = request.body.price;
   Event.enabled_for_enrollment = request.body.enabled_for_enrollment;
   Event.max_assistance = request.body.max_assistance;
-  Event.id_creator_user = request.user.id;
+  Event.id_creator_user = request.user.id; 
   
   try {
-    console.log(Event.max_assistence)
+    console.log(Event.max_assistence + "asdad");
+    console.log(Event.enabled_for_enrollment + "asdad");
     const respuesta = await eventService.insertEvent(Event);
     return response.json(respuesta);
   } catch (error) {

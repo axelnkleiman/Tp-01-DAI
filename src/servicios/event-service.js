@@ -2,14 +2,18 @@ import EventRepository from "../repositorios/event-repository.js";
 import {Paginacion, PaginationDto} from "../utils/paginacion.js";
 
 const repository = new EventRepository();
-const pagination = new Paginacion();
+const PaginacionConfig = new Paginacion();
 
 export class EventService{
-    async getAllEvents(Event, pageSize, reqPage){
-        const parsedLimit = pagination.parseLimit(pageSize);
-        const parsedOffset = pagination.parseOffset(reqPage);
-        const allEvents = await repository.getAllEvents(Event, parsedLimit, parsedOffset);
-        return allEvents;
+    async getAllEvents(limit, offset){
+      const parsedLimit = PaginacionConfig.parseLimit(limit);
+      const parsedOffset = PaginacionConfig.parseOffset(offset);
+      const cantidad = Number.parseInt(await repository.cantEventos());
+      const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/events`);
+      const events = await repository.getAllEvents(parsedLimit,parsedOffset);
+
+      const collection={events,paginacion}  
+      return collection;
     }
 
     async getEventByFilter(Event, pageSize, reqPage) {
@@ -35,8 +39,8 @@ export class EventService{
     }
     
       async deleteEvent(id) {
-       await repository.deleteEvent(id);
-        return "Evento Eliminado correctamente";
+      const result = await repository.deleteEvent(id);
+      return result;
     }
     
       async inscripcionEvent(enrollment) {
@@ -52,5 +56,13 @@ export class EventService{
       async insertEvent(event) {   
         await repository.insertEvent(event);
         return "Evento Insertado correctamente";
+    }
+    async getEvent_TagsById(id){
+      const result = await repository.getEvent_TagsById(id);
+      return result;
+    }
+    async getEvent_EnrollmentById(id){
+      const result = await repository.getEvent_EnrollmentById(id);
+      return result;
     }
 }

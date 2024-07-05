@@ -20,7 +20,7 @@ export class LocationService {
     }
 
     async getLocationsById(id){
-        return await repository.getLocationsById(id);  
+        return await repository.getLocationsById(id);
     }
     
     async getEventLocationsByLocation(id,limit,offset){
