@@ -1,5 +1,5 @@
 import express from "express";
-import UserService from "../servicios/user-service.js"
+import {UserService} from "../servicios/user-service.js"
 
 const router = express.Router();
 const userService = new UserService();
@@ -16,7 +16,7 @@ router.post("/login", async (request, response) => {
       "token":token});
     }else{
       return res.status(401).json({
-        "succes":false,
+        "success":false,
         "message":"Logueado correctamente",
         "token":""});
     }

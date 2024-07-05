@@ -5,6 +5,13 @@ const repository = new EventRepository();
 const pagination = new Pagination();
 
 export class EventService{
+    async getAllEvents(Event, pageSize, reqPage){
+        const parsedLimit = pagination.parseLimit(pageSize);
+        const parsedOffset = pagination.parseOffset(reqPage);
+        const allEvents = await repository.getAllEvents(Event, parsedLimit, parsedOffset);
+        return allEvents;
+    }
+
     async getEventByFilter(Event, pageSize, reqPage) {
         const parsedLimit = pagination.parseLimit(pageSize);
         const parsedOffset = pagination.parseOffset(reqPage);
@@ -18,7 +25,7 @@ export class EventService{
     }
 
     async detalleEvent(id){
-      const detalle = await repository.deleteEvent(id);
+      const detalle = await repository.detalleEvent(id);
       return detalle;
     }
     

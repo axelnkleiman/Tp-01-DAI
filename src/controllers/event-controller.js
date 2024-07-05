@@ -35,7 +35,7 @@ router.get("/" , async (request, response) => {
   }
 });
 
-router.delete("/:id", AuthMiddleware , async (req, res) => {
+router.delete("/:id", AuthMiddleware , async (request, response) => {
   const id = request.params.id;
   try {
     await eventService.deleteEvent(id);
