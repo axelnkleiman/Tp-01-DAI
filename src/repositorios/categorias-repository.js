@@ -82,11 +82,12 @@ async updateCategory(category){
 
 async deleteCategory(id){
     try {
-        const sql = "Delete FROM event_categories WHERE id = $1"
-        const values = [id]
-        await this.BDclient.query(sql,values)
-    } catch (error) {
+        const sql = `Delete FROM event_categories WHERE id=$1`;
+        const values = [id];
+        const result = await this.BDclient.query(sql, values);
+        console.log(result)
+        } catch (error) {
         console.log(error);
-    }
+        }
 }
 }

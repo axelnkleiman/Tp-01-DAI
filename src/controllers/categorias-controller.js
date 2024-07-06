@@ -39,8 +39,9 @@ router.get("/", async (request, response) => {
 
   router.post("/", AuthMiddleware, async (request, response) => {
     const Category = {};
-    Category.name = request.query.name;
-    Category.display_order = request.query.display_order
+    Category.id = request.params.id;
+    Category.name = request.body.name;
+    Category.display_order = request.body.display_order
     
     if (Category.name != null) {
       try {
@@ -50,14 +51,14 @@ router.get("/", async (request, response) => {
         console.log(error);
         return response.status(402).json(error);
       }
-  } else return response.status(400).json("Vacio");
+  } else return response.status(400).json(" Datos Vacio");
   });
 
   router.patch("/", AuthMiddleware, async (request, response) => {
     const category = {};
-    category.name = request.query.name;
-    category.display_order = request.query.display_order;
-    category.id = request.query.id;
+    category.name = request.body.name;
+    category.display_order = request.body.display_order;
+    category.id = request.body.id;
 
     if ((category.name != null || category.display_order || null) && category.id != null) {
       try {
@@ -72,7 +73,7 @@ router.get("/", async (request, response) => {
   router.delete("/:id", AuthMiddleware, async (request, response) => {
     const id = request.params.id;
     try {
-        const respuesta = await categoryService.deleteCategoria(id)
+        const respuesta = await categoryService.deleteCategory(id)
         return response.status(200).json(respuesta)
       } catch (error) {
         return response.status(404).json("Id no encontrado");

@@ -22,8 +22,8 @@ export class CategoryService{
     }
     
     async insertCategory(Category){
-        repository.insertCategory(Category);
-        return "Categoria insertada correctamente";
+        const result = await repository.insertCategory(Category);
+        return result;
     }
 
     async updateCategory(category){
