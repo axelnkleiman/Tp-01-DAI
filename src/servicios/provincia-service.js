@@ -7,14 +7,15 @@ const locationRepository = new LocationRepository();
 const PaginacionConfig = new Paginacion();
 
 export class ProvinciaService {
-  async getProvincias(pageSize, reqPage) {
-    const parsedLimit = PaginacionConfig.parseLimit(pageSize) 
-    const parsedOffset = PaginacionConfig.parseOffset(reqPage)
-    const cantidad =  Number.parseInt(await repository.cantProvincias());
-    const nextPage = ((parsedOffset+1)*parsedLimit<=cantidad) ?`/province`:"null";
-    const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, nextPage)
-    const provincias = await repository.getProvincias(parsedLimit, parsedOffset)
-    return {provincias, paginacion};  
+  async getProvincias(limit, offset) {
+    const parsedLimit = PaginacionConfig.parseLimit(limit);
+    const parsedOffset = PaginacionConfig.parseOffset(offset);
+    const cantidad = Number.parseInt(await repository.cantProvincias());
+    const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/provinces`);
+    const provincia = await repository.getProvincias(parsedLimit,parsedOffset);
+
+    const collection={provincia,paginacion}  
+    return collection;
   }
 
   async getProvinciaById(id){

@@ -45,7 +45,7 @@ router.post("/",AuthMiddleware, async (request,response)=>{
     EventLocation.id_creator_user=request.user.id;
 
     try {
-        const respuesta = await eventLocationService.InsertEventLocation(Evento);;
+        const respuesta = await eventLocationService.InsertEventLocation(EventLocation);
         return response.json(respuesta);
     } catch (error) {
         console.log(error);

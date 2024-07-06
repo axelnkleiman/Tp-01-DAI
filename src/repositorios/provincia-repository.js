@@ -37,8 +37,8 @@ export default class ProvinciaRepository{
     async getProvincias(limit, offset){
         let entity = null;
         try{
-            const sql="SELECT * FROM provinces limit $1 offset $2";
-            const values = [limit, (offset*limit)]
+            const sql="SELECT * FROM provinces ORDER BY id ASC LIMIT $1 OFFSET $2";
+            const values = [limit, offset]
             const result=await this.BDclient.query(sql, values);
             
             if(result.rows.length>0){

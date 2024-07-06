@@ -39,19 +39,19 @@ export default class EventLocationRepository {
   }
 
     async getEventLocationById(id){
-        let returnEntity = null;
+        let entity = null;
       try {
         var sql = `SELECT * FROM event_locations WHERE id=$1`;
         const values = [id];
         const result = await this.BDclient.query(sql, values);
 
       if (result.rows.length > 0) {
-        returnEntity = result.rows[0];
+        entity = result.rows[0];
       }
         } catch (error) {
         console.log(error);
         }
-        return returnEntity;
+        return entity;
     }
     async InsertEventLocation(eventLocation){
       try{
