@@ -17,8 +17,8 @@ export class EventService{
     }
 
     async getEventByFilter(Event, pageSize, reqPage) {
-        const parsedLimit = pagination.parseLimit(pageSize);
-        const parsedOffset = pagination.parseOffset(reqPage);
+        const parsedLimit = PaginacionConfig.parseLimit(pageSize);
+        const parsedOffset = PaginacionConfig.parseOffset(reqPage);
         const filtros = await repository.getEventByFilter(Event, parsedLimit, parsedOffset);
         return {filtros};
     }
@@ -33,8 +33,8 @@ export class EventService{
       return detalle;
     }
     
-      async patchEvento(Event) {
-        await repository.patchEvento(Event);
+      async patchEvent(Event) {
+        await repository.patchEvent(Event);
         return "Evento Actualizado correctamente";
     }
     
@@ -44,8 +44,8 @@ export class EventService{
     }
     
       async inscripcionEvent(enrollment) {
-        await repository.inscripcionEvent(enrollment);
-        return "Evento Inscripto correctamente";
+        const result = await repository.inscripcionEvent(enrollment);
+        return result;
     }
     
       async updateRating(id, rating) {
@@ -63,6 +63,10 @@ export class EventService{
     }
     async getEvent_EnrollmentById(id){
       const result = await repository.getEvent_EnrollmentById(id);
+      return result;
+    }
+    async deleteEventEnrollment(id){
+      const result = await repository.deleteEventEnrollment(id);
       return result;
     }
 }

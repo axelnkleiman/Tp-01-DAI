@@ -1,4 +1,4 @@
-import express from "express";
+import express, { request, response } from "express";
 import { EventService } from "../servicios/event-service.js";
 import AuthMiddleware from "../auth/authmiddleware.js";
 
@@ -23,15 +23,15 @@ router.get("/" , async (request, response) => {
   
   try {
     /*if (esFecha(Event.startDate) || Event.startDate == undefined) {*/
-      const allEvents = await eventService.getAllEvents(limit, offset);
+      const allEvents = await eventService.getAllEvents/*getEventByFilter*/(/*Event,*/ limit, offset);
       console.log(allEvents);
       return response.send(allEvents);
     } /*else {
       return response.json("error en los filtros");
     }
-  }*/ catch (error) {
+  } */catch (error) {
     console.log(error);
-    return response.json("a");
+    return response.json("error");
   }
 });
 
@@ -89,7 +89,7 @@ router.put("/",AuthMiddleware, async (request, response) => {
   Event.max__assistance = request.body.max__assistance;
   Event.id = request.body.id;
   try {
-    const respuesta = await eventService.patchEvento(Event);
+    const respuesta = await eventService.patchEvent(Event);
     return response.json(respuesta);
   } catch (error) {
     console.log(error);
@@ -123,24 +123,36 @@ router.get("/:id/enrollment", async (request, response) => {
   enrollment.rating = request.query.rating;
 
     try {
-      const x = await eventService.getEventEnrollment(enrollment);
-      return response.json(x);
+      const result = await eventService.getEventEnrollment(enrollment);
+      return response.json(result);
     } catch (error) {
       console.log(error);
       return response.json(error);
     }
 });
 
+router.delete("/:id/enrollment", AuthMiddleware, async (request, response) => {
+  const id = request.params.id;
+  try{
+    const event = await eventService.deleteEventEnrollment(id);
+    return response.json("Enrollment eliminado");
+  } catch (error) {
+    console.log(error);
+    return response.json(error);
+  }
+})
+
 router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
   const enrollment = {};
-  const event = await eventService.getEventById(request.params.id)
+  const event = await eventService.detalleEvent(request.params.id)
   enrollment.id = request.params.id;
+  enrollment.id_event = request.body.id_event;
   enrollment.attended = request.body.attended;
   enrollment.rating = request.body.rating;
   enrollment.descripcion = request.body.descripcion;
   enrollment.observations = request.body.observations;
   enrollment.user_id = request.user.id; 
-  enrollment.enabled = event.enabled_for_enrollment
+  enrollment.enabled = event.enabled_for_enrollment;
 
   try {
     await eventService.inscripcionEvent(enrollment);

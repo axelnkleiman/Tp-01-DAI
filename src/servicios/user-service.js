@@ -20,7 +20,7 @@ export class UserService {
     }
   }
 
-  async register(user) {
+  async InsertUser(user) {
     await repository.InsertUser(user)
   }
 

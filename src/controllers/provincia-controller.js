@@ -4,27 +4,27 @@ import {ProvinciaService} from "../servicios/provincia-service.js";
 const router = express.Router();
 const provinciaService = new ProvinciaService();
 
-router.post("/", (request, response) => {
-    const body = request.body;
-    return response.status(201).send({
-        page: body.page,
-        pageSize: body.pageSize,
-        name: body.name,
-        full_name: body.full_name,
-        latitude: body.latitude,
-        longitude: body.longitude,
-        display_order: body.display_order,
-    });
+router.post("/", async (request, response) => {
+    const Provincia = {};
+    Provincia.id = request.params.id;
+    Provincia.name = request.body.name;
+    Provincia.full_name = request.body.full_name;
+    Provincia.latitude = request.body.latitude
+    Provincia.longitude = request.body.longitude;
+    Provincia.display_order = request.body.display_order;
+    
+    try {
+      const respuesta = await provinciaService.insertProvincia(Provincia);
+      return response.json(respuesta);
+    } catch (error) {
+      console.log(error);
+      return response.json(error);
+    }
 });
 
 router.get("/", async (request, response) =>{
     const pageSize = request.query.pageSize;
     const page = request.query.page;
-    const name = request.query.name;
-    const full_name = request.query.full_name;
-    const latitude = request.query.latitude;
-    const longitude = request.query.longitude;
-    const display_order = request.query.display_order;
 
     try{
         const provincias = await provinciaService.getProvincias(pageSize, page);
@@ -51,17 +51,35 @@ router.get("/:id", async (request, response) => {
   }
 });
 
-router.patch("/:id", (request, response) => {
-    return {
-      id: request.params.id,
-    };
-  });
+router.patch("/:id", async (request, response) => {
+    const Provincia = {};
+    Provincia.id = request.params.id;
+    Provincia.name = request.body.name;
+    Provincia.full_name = request.body.full_name;
+    Provincia.latitude = request.body.latitude;
+    Provincia.longitude = request.body.longitude;
+    Provincia.display_order = request.body.display_order;
+    try {
+      const respuesta = await provinciaService.patchProvincia(Provincia);
+      return response.json("Provincia Actualizada");
+    } catch (error) {
+      console.log(error);
+      return response.json(error);
+    }
+    });
   
 
-router.delete("/:id", (request, response) => {
+router.delete("/:id", async (request, response) => {
     const id = request.params.id;
-    console.log(id);
-    return response.send("Ok!");
-  });
+    try{
+      const provincia = await provinciaService.DeleteProvincia(id);
+      const location = await provinciaService.DeleteLocationsById(id);
+      console.log(provincia);
+      return response.status(200).json("Se elimino la provincia");
+    } catch (error) {
+      console.log(error);
+      return response.status(404).json("No se puede eliminar la provincia");
+    }
+    });
 
 export default router;

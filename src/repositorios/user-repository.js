@@ -38,13 +38,25 @@ export default class UserRepository{
         }
         return entity;
 }
-    async InsertUser(user){
-        try{
-        const sql="INSERT INTO users(first_name,last_name,username,password) VALUES ($1,$2,$3,$4)";
-        const values=[user.first_name,user.last_name, user.username, user.password];
-        await this.BDclient.query(sql,values);
-        }catch(error){
-            console.log(error)
+async InsertUser(user) {
+    let entity = null;
+    try {
+        const sql1 = "SELECT id FROM users ORDER BY id DESC LIMIT 1";
+        const ultimoIdResult = await this.BDclient.query(sql1);
+        let id = 1;
+        if (ultimoIdResult.rows.length > 0) {
+            id = ultimoIdResult.rows[0].id + 1;
         }
+        const sql = "INSERT INTO users(id, first_name, last_name, username, password) VALUES($1, $2, $3, $4, $5)";
+        const values = [id, user.first_name, user.last_name, user.username, user.password];
+        const result = await this.BDclient.query(sql, values);
+        if (result.rowCount > 0) {
+            entity = result.rows[0];
+        }
+    } catch (error) {
+        console.log(error);
     }
+    return entity;
+}
+
 };

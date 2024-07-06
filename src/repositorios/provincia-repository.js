@@ -120,4 +120,20 @@ export default class ProvinciaRepository{
       return "Error";
       }
     }
+    async DeleteLocationsById(id){
+      var entity=null
+      try{
+          const sql=`DELETE FROM locations WHERE id_province=$1`
+          const values=[id]
+          const result= await this.BDclient.query(sql,values);
+      if (result.rows.length>0) {
+        entity=result.rows;
+      }
+      }catch(error){
+        console.log(error);
+      }
+      return entity;
+    
+    }
+    
 };

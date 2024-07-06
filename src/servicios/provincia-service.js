@@ -31,13 +31,7 @@ export class ProvinciaService {
   }
 
   async DeleteProvincia(id) {
-    const locations = ((await this.getLocationByProvincia(id,1,0)).localidades);
-    if (locations == null) {
-       await repository.deleteProvincia(id);
-       return true;
-    }else{
-      return false;
-    }
+       return await repository.deleteProvincia(id);
   }
 
   async getLocationsByProvincia(id_provincia,limit,offset){
@@ -48,5 +42,8 @@ export class ProvinciaService {
     const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, nextPage)
     const localidades = await locationRepository.getLocationByProvincia(id_provincia,parsedLimit,parsedOffset)
     return {localidades, paginacion};  
+}
+async DeleteLocationsById(id){
+    return await repository.DeleteLocationsById(id);
 }
 }

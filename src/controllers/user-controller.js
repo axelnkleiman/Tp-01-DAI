@@ -28,6 +28,7 @@ router.post("/login", async (request, response) => {
 
 router.post("/register", async (request, response) => {
   const user = {};
+  user.id = request.params.id;
   user.first_name = request.body.first_name;
   user.last_name = request.body.last_name;
   user.username = request.body.username;
@@ -41,7 +42,7 @@ router.post("/register", async (request, response) => {
 
         if(mailish.test(user.username)){
           
-           await userService.register(user);
+           await userService.InsertUser(user);
            return response.status(201).send("Mail registrado");
   
         }else{

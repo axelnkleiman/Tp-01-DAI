@@ -302,4 +302,14 @@ export default class EventRepository {
         }
         return entity;
       }
+      async deleteEventEnrollment(id){
+        try {
+            const sql = `Delete FROM event_enrollments WHERE id=$1`;
+            const values = [id];
+            const result = await this.BDclient.query(sql, values);
+            console.log(result)
+            } catch (error) {
+            console.log(error);
+            }
+      }
 }
