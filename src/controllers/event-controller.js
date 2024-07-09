@@ -22,12 +22,12 @@ router.get("/" , async (request, response) => {
   Event.tag = request.query.tag;
   
   try {
-      if (esFecha(Event.startDate) || Event.startDate == undefined) {
-      const allEvents = await eventService.getAllEvents (Event, limit, offset);
-      console.log(allEvents);
-      return response.send(allEvents);
+    if (esFecha(Event.startDate) || Event.startDate == undefined) {
+      const getEvents = await eventService.getEventByFilter(Event, limit, offset);
+      /*const getEvents = await eventService.getAllEvents(limit, offset);*/
+      console.log(getEvents);
+      return response.send(getEvents); 
     } else {
-      return response.json("error en los filtros");
     }
   } catch (error) {
     console.log(error);

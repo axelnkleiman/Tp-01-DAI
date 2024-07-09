@@ -9,18 +9,21 @@ export class EventService{
       const parsedLimit = PaginacionConfig.parseLimit(limit);
       const parsedOffset = PaginacionConfig.parseOffset(offset);
       const cantidad = Number.parseInt(await repository.cantEventos());
-      const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/events`);
+      const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/event`);
       const events = await repository.getAllEvents(parsedLimit,parsedOffset);
 
       const collection={events,paginacion}  
       return collection;
     }
 
-    async getEventByFilter(Event, pageSize, reqPage) {
-        const parsedLimit = PaginacionConfig.parseLimit(pageSize);
-        const parsedOffset = PaginacionConfig.parseOffset(reqPage);
-        const filtros = await repository.getEventByFilter(Event, parsedLimit, parsedOffset);
-        return {filtros};
+    async getEventByFilter(Event, limit, offset) {
+      const parsedLimit = PaginacionConfig.parseLimit(limit);
+      const parsedOffset = PaginacionConfig.parseOffset(offset);
+      const cantidad = Number.parseInt(await repository.cantEventos());
+      const paginacion = PaginacionConfig.buildPaginationDto(parsedLimit, parsedOffset, cantidad, `/event`);
+      const events = await repository.getEventByFilter(Event,parsedLimit,parsedOffset);
+      const collection={events,paginacion}  
+      return collection;
     }
 
       async getEventEnrollment(enrollment) {

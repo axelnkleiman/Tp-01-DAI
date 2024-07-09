@@ -20,7 +20,7 @@ export default class EventRepository {
         async getAllEvents(limit, offset) {
             try {
                 var sql = `
-      SELECT distinct
+      SELECT 
           e.id, 
           e.name, 
           e.description, 
@@ -84,7 +84,14 @@ export default class EventRepository {
           event_tags et on et.id_event = e.id
       INNER JOIN
           tags t on et.id_tag = t.id
-          ORDER BY id ASC LIMIT $1 OFFSET $2;
+           GROUP BY 
+          e.id,
+          ec.id,
+          el.id,
+          l.id,
+          p.id,
+          u.id
+          ORDER BY e.id ASC LIMIT $1 OFFSET $2;
   `;
                 const values = [limit, offset];
                 const result = await this.BDclient.query(sql, values);
@@ -97,13 +104,70 @@ export default class EventRepository {
     async getEventByFilter(Event, pageSize, reqPage) {
         var entity = null;
         try {
-        var sql = `SELECT e.name, e.description, ec.name as Category, el.name as Location, e.start_date, e.duration_in_minutes, e.price, e.enabled_for_enrollment, e.max_assistance 
-                    FROM events e 
-                    LEFT join event_categories ec on e.id_event_category=ec.id 
-                    LEFT join event_tags et on e.id=et.id_event 
-                    LEFT join tags t on et.id_tag=t.id 
-                    LEFT join locations el on e.id_event_location = el.id 
-                    LEFT join users u on e.id_creator_user = u.id WHERE `;
+        var sql = `   SELECT 
+          e.id, 
+          e.name, 
+          e.description, 
+          json_build_object (
+              'id', ec.id,
+              'name', ec.name
+          ) AS event_category,
+          json_build_object (
+              'id', el.id,
+              'name', el.name,
+              'full_address', el.full_address,
+              'latitude', el.latitude,
+              'longitude', el.longitude,
+              'max_capacity', el.max_capacity,
+              'location', json_build_object (
+                  'id', l.id,
+                  'name', l.name,
+                  'latitude', l.latitude,
+                  'longitude', l.longitude,
+                  'max_capacity', el.max_capacity,
+                  'province', json_build_object (
+                      'id', p.id,
+                      'name', p.name,
+                      'full_name', p.full_name,
+                      'latitude', p.latitude,
+                      'longitude', p.longitude,
+                      'display_order', p.display_order
+                  )
+              )
+          ) AS event_location,
+          e.start_date, 
+          e.duration_in_minutes, 
+          e.price, 
+          e.enabled_for_enrollment, 
+          e.max_assistance, 
+          json_build_object (
+              'id', u.id,
+              'username', u.username,
+              'first_name', u.first_name,
+              'last_name', u.last_name
+          ) AS creator_user,
+          (
+              SELECT json_agg(json_build_object('id', t.id, 'name', t.name))
+              FROM event_tags et
+              INNER JOIN tags t ON et.id_tag = t.id
+              WHERE et.id_event = e.id
+          ) AS tags
+      FROM 
+          events e 
+      INNER JOIN 
+          event_categories ec ON e.id_event_category = ec.id 
+      LEFT JOIN 
+          event_locations el ON e.id_event_location = el.id
+      INNER JOIN
+          locations l ON el.id_location = l.id
+      INNER JOIN
+          provinces p ON l.id_province = p.id
+      INNER JOIN
+          users u ON e.id_creator_user = u.id
+      INNER JOIN 
+          event_tags et on et.id_event = e.id
+      INNER JOIN
+          tags t on et.id_tag = t.id WHERE `;
         const values = [
             pageSize,
             reqPage,
@@ -137,7 +201,7 @@ export default class EventRepository {
         if (sql.endsWith(" where ")) {
             sql = sql.slice(0, -7);
         }
-        sql += " group by e.id, e.description, e.name,ec.name,el.name,e.start_date, e.duration_in_minutes, e.price, e.enabled_for_enrollment, e.max_assistance order by e.id asc limit $1 offset $2 ";
+        sql += "    GROUP BY e.id, ec.id, el.id,l.id,p.id,u.id order by e.id asc limit $1 offset $2 ";
         const result = await this.BDclient.query(sql, values);
 
         if (result.rows.length > 0) {
@@ -152,14 +216,73 @@ export default class EventRepository {
     async detalleEvent(id) {
         let entity = null;
         try {
-        var sql = `SELECT e.name, e.description, ec.name as Category, el.name as Location, e.start_date, e.duration_in_minutes, e.price, e.enabled_for_enrollment, e.max_assistance 
-                    FROM events e 
-                    INNER join event_categories ec on e.id_event_category=ec.id 
-                    INNER join event_tags et on e.id=et.id_event 
-                    INNER join tags t on et.id_tag=t.id
-                    INNER join locations el on e.id_event_location = el.id 
-                    INNER join users u on e.id_creator_user = u.id 
-                    WHERE e.id=$1`;
+            var sql = `
+            SELECT
+                e.id, 
+                e.name, 
+                e.description, 
+                json_build_object (
+                    'id', ec.id,
+                    'name', ec.name
+                ) AS event_category,
+                json_build_object (
+                    'id', el.id,
+                    'name', el.name,
+                    'full_address', el.full_address,
+                    'latitude', el.latitude,
+                    'longitude', el.longitude,
+                    'max_capacity', el.max_capacity,
+                    'location', json_build_object (
+                        'id', l.id,
+                        'name', l.name,
+                        'latitude', l.latitude,
+                        'longitude', l.longitude,
+                        'max_capacity', el.max_capacity,
+                        'province', json_build_object (
+                            'id', p.id,
+                            'name', p.name,
+                            'full_name', p.full_name,
+                            'latitude', p.latitude,
+                            'longitude', p.longitude,
+                            'display_order', p.display_order
+                        )
+                    )
+                ) AS event_location,
+                e.start_date, 
+                e.duration_in_minutes, 
+                e.price, 
+                e.enabled_for_enrollment, 
+                e.max_assistance, 
+                json_build_object (
+                    'id', u.id,
+                    'username', u.username,
+                    'first_name', u.first_name,
+                    'last_name', u.last_name
+                ) AS creator_user,
+                (
+                    SELECT json_agg(json_build_object('id', t.id, 'name', t.name))
+                    FROM event_tags et
+                    INNER JOIN tags t ON et.id_tag = t.id
+                    WHERE et.id_event = e.id
+                ) AS tags
+            FROM 
+                events e 
+            INNER JOIN 
+                event_categories ec ON e.id_event_category = ec.id 
+            LEFT JOIN 
+                event_locations el ON e.id_event_location = el.id
+            INNER JOIN
+                locations l ON el.id_location = l.id
+            INNER JOIN
+                provinces p ON l.id_province = p.id
+            INNER JOIN
+                users u ON e.id_creator_user = u.id
+            INNER JOIN 
+                event_tags et on et.id_event = e.id
+            INNER JOIN
+                tags t on et.id_tag = t.id
+                WHERE e.id = $1;
+        `;
         const values = [id];
         const result = await this.BDclient.query(sql, values);
 
