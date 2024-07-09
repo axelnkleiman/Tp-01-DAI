@@ -68,7 +68,7 @@ router.post("/",AuthMiddleware, async (request, response) => {
   Event.id_creator_user = request.user.id; 
   
   try {
-    console.log(Event.max_assistence + "asdad");
+    console.log(Event.max_assistance + "asdad");
     console.log(Event.enabled_for_enrollment + "asdad");
     const respuesta = await eventService.insertEvent(Event);
     return response.json(respuesta);
@@ -144,22 +144,23 @@ router.delete("/:id/enrollment", AuthMiddleware, async (request, response) => {
 
 router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
   const enrollment = {};
+  const date = new Date();
   const event = await eventService.detalleEvent(request.params.id)
-  enrollment.id = request.params.id;
-  enrollment.id_event = request.body.id_event;
-  enrollment.attended = request.body.attended;
-  enrollment.rating = request.body.rating;
+  console.log(event)
+  enrollment.id_event = event.id;
+  enrollment.id_user = request.user.id;
   enrollment.descripcion = request.body.descripcion;
+  enrollment.registration_date_time = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+  enrollment.attended = request.body.attended;
   enrollment.observations = request.body.observations;
-  enrollment.user_id = request.user.id; 
-  enrollment.enabled = event.enabled_for_enrollment;
+  enrollment.rating = request.body.rating;
 
   try {
-    await eventService.inscripcionEvent(enrollment);
-    return response.json("Inscripto correctamente");
+    await eventService.inscripcionEvent(enrollment, event);
+    return response.status(201).send("Inscripto correctamente");
   } catch (error) {
     console.log(error);
-    return response.json(error);
+    return response.status(404).json(error);
   }
 });
 

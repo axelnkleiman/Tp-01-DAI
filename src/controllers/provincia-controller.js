@@ -82,4 +82,18 @@ router.delete("/:id", async (request, response) => {
     }
     });
 
+  router.get("/:id/locations", async (request, response) => {
+    const pageSize = request.query.pageSize;
+    const page = request.query.page;
+    const id = request.params.id;
+    try{
+      const provincia = await provinciaService.getProvinciaById(id);
+      const respuesta = await provinciaService.getLocationsByProvincia(id, pageSize, page);
+      return response.status(200).json(respuesta);
+    }catch(error){
+      console.log(error);
+      return response.json(error);
+    }
+  })
+
 export default router;

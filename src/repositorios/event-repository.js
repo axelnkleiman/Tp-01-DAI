@@ -236,19 +236,27 @@ export default class EventRepository {
         }
     }
 
-    async inscripcionEvent(enrollment) {
+    async inscripcionEvent(enrollment, event) {
+        const entity = null;
         try {
         var sql = ""
-        if (enrollment.enabled) {
-            sql = `INSERT INTO event_enrollments (id_event, id_user, description, registration_date_time,attended,observations,rating) VALUES ($1,$2,$3,$4,$5,$6,$7)`;
-        }else return "Error";
-        const date = new Date();
-        const fecha = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} `
-        const values = [enrollment.idEvent, enrollment.user_id,enrollment.description, fecha,enrollment.attended, enrollment.observations, enrollment.rating]
-        await this.BDclient.query(sql, values);
+        if (event.enabled_for_enrollment) {
+            sql = `INSERT INTO event_enrollments(id_event, id_user, description, registration_date_time, attended, observations, rating) VALUES ($1,$2,$3,$4,$5,null,$6)`;
+            const values = [enrollment.idEvent, enrollment.user_id, enrollment.description, enrollment.registration_date_time, enrollment.attended, enrollment.rating]
+            const respuesta = await this.BDclient.query(sql, values); 
+            if (result.rows.length>0) {
+                entity=result.rows;
+              }
+            console.log( "HOLAL " + respuesta)
+        }else {
+            const aaa = "Error"
+            console.log(aaa)
+        }
+      
         } catch (error) {
         console.log(error);
         }
+        return entity;
     }
 
     async updateRating(rating,id) {
