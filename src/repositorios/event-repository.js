@@ -19,7 +19,73 @@ export default class EventRepository {
         }
         async getAllEvents(limit, offset) {
             try {
-                var sql = "SELECT * FROM events ORDER BY id ASC LIMIT $1 OFFSET $2";
+                var sql = `
+      SELECT distinct
+          e.id, 
+          e.name, 
+          e.description, 
+          json_build_object (
+              'id', ec.id,
+              'name', ec.name
+          ) AS event_category,
+          json_build_object (
+              'id', el.id,
+              'name', el.name,
+              'full_address', el.full_address,
+              'latitude', el.latitude,
+              'longitude', el.longitude,
+              'max_capacity', el.max_capacity,
+              'location', json_build_object (
+                  'id', l.id,
+                  'name', l.name,
+                  'latitude', l.latitude,
+                  'longitude', l.longitude,
+                  'max_capacity', el.max_capacity,
+                  'province', json_build_object (
+                      'id', p.id,
+                      'name', p.name,
+                      'full_name', p.full_name,
+                      'latitude', p.latitude,
+                      'longitude', p.longitude,
+                      'display_order', p.display_order
+                  )
+              )
+          ) AS event_location,
+          e.start_date, 
+          e.duration_in_minutes, 
+          e.price, 
+          e.enabled_for_enrollment, 
+          e.max_assistance, 
+          json_build_object (
+              'id', u.id,
+              'username', u.username,
+              'first_name', u.first_name,
+              'last_name', u.last_name
+          ) AS creator_user,
+          (
+              SELECT json_agg(json_build_object('id', t.id, 'name', t.name))
+              FROM event_tags et
+              INNER JOIN tags t ON et.id_tag = t.id
+              WHERE et.id_event = e.id
+          ) AS tags
+      FROM 
+          events e 
+      INNER JOIN 
+          event_categories ec ON e.id_event_category = ec.id 
+      LEFT JOIN 
+          event_locations el ON e.id_event_location = el.id
+      INNER JOIN
+          locations l ON el.id_location = l.id
+      INNER JOIN
+          provinces p ON l.id_province = p.id
+      INNER JOIN
+          users u ON e.id_creator_user = u.id
+      INNER JOIN 
+          event_tags et on et.id_event = e.id
+      INNER JOIN
+          tags t on et.id_tag = t.id
+          ORDER BY id ASC LIMIT $1 OFFSET $2;
+  `;
                 const values = [limit, offset];
                 const result = await this.BDclient.query(sql, values);
                 return result.rows;
@@ -105,6 +171,7 @@ export default class EventRepository {
         }
         return entity;
     }
+
 
     async getEventEnrollment(enrollment) {
         let entity = null;
@@ -236,26 +303,21 @@ export default class EventRepository {
         }
     }
 
-    async inscripcionEvent(enrollment, event) {
+    async inscripcionEvent(enrollment) {
         const entity = null;
         try {
         var sql = ""
-        if (event.enabled_for_enrollment) {
-            sql = `INSERT INTO event_enrollments(id_event, id_user, description, registration_date_time, attended, observations, rating) VALUES ($1,$2,$3,$4,$5,null,$6)`;
-            const values = [enrollment.idEvent, enrollment.user_id, enrollment.description, enrollment.registration_date_time, enrollment.attended, enrollment.rating]
+            sql = `INSERT INTO event_enrollments(id_event, id_user, description, registration_date_time, attended, observations, rating) VALUES ($1,$2,$3,$4,$5,$6,$7)`;
+            const values = [enrollment.id_event, enrollment.id_user, enrollment.description, enrollment.registration_date_time, enrollment.attended, null, null]
             const respuesta = await this.BDclient.query(sql, values); 
-            if (result.rows.length>0) {
-                entity=result.rows;
+            if (respuesta.rows.length>0) {
+                entity=respuesta.rows;
               }
             console.log( "HOLAL " + respuesta)
-        }else {
-            const aaa = "Error"
-            console.log(aaa)
-        }
-      
         } catch (error) {
         console.log(error);
         }
+        console.log(entity)
         return entity;
     }
 

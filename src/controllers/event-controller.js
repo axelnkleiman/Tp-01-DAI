@@ -22,14 +22,14 @@ router.get("/" , async (request, response) => {
   Event.tag = request.query.tag;
   
   try {
-    /*if (esFecha(Event.startDate) || Event.startDate == undefined) {*/
-      const allEvents = await eventService.getAllEvents/*getEventByFilter*/(/*Event,*/ limit, offset);
+      if (esFecha(Event.startDate) || Event.startDate == undefined) {
+      const allEvents = await eventService.getAllEvents (Event, limit, offset);
       console.log(allEvents);
       return response.send(allEvents);
-    } /*else {
+    } else {
       return response.json("error en los filtros");
     }
-  } */catch (error) {
+  } catch (error) {
     console.log(error);
     return response.json("error");
   }
@@ -145,19 +145,22 @@ router.delete("/:id/enrollment", AuthMiddleware, async (request, response) => {
 router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
   const enrollment = {};
   const date = new Date();
-  const event = await eventService.detalleEvent(request.params.id)
-  console.log(event)
-  enrollment.id_event = event.id;
-  enrollment.id_user = request.user.id;
-  enrollment.descripcion = request.body.descripcion;
-  enrollment.registration_date_time = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
-  enrollment.attended = request.body.attended;
-  enrollment.observations = request.body.observations;
-  enrollment.rating = request.body.rating;
+    enrollment.id_event = request.params.id;
+    enrollment.id_user = request.user.id;
+    enrollment.descripcion = request.body.descripcion;
+    enrollment.registration_date_time = new Date().toISOString();
+    console.log(enrollment.registration_date_time)
+    enrollment.attended = request.body.attended;
+    const event = await eventService.detalleEvent(enrollment.id_event)
+    console.log(event)
 
   try {
-    await eventService.inscripcionEvent(enrollment, event);
-    return response.status(201).send("Inscripto correctamente");
+    if(event.enabled_for_enrollment){
+      await eventService.inscripcionEvent(enrollment);
+      return response.status(201).send("Inscripto correctamente");
+    }else{
+      return response.status(404).send("No estas habilitado para inscribirte");
+    }
   } catch (error) {
     console.log(error);
     return response.status(404).json(error);

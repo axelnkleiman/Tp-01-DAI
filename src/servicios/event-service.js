@@ -43,8 +43,8 @@ export class EventService{
       return result;
     }
     
-      async inscripcionEvent(enrollment, event) {
-        const result = await repository.inscripcionEvent(enrollment, event);
+      async inscripcionEvent(enrollment) {
+        const result = await repository.inscripcionEvent(enrollment);
         return result;
     }
     
