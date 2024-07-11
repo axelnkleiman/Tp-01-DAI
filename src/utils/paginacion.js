@@ -14,7 +14,7 @@ export class Paginacion {
   offsetRegex = /offset=\d+/;
 
   parseLimit(limit) {
-    return !isNaN(parseInt(limit)) ? parseInt(limit) : 5; // Cambie a 5
+    return !isNaN(parseInt(limit)) ? parseInt(limit) : 15;
   }
 
   parseOffset(offset) {

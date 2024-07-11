@@ -149,17 +149,15 @@ router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
     enrollment.id_user = request.user.id;
     enrollment.descripcion = request.body.descripcion;
     enrollment.registration_date_time = new Date().toISOString();
-    console.log(enrollment.registration_date_time)
+    console.log(enrollment.registration_date_time);
     enrollment.attended = request.body.attended;
-    const event = await eventService.detalleEvent(enrollment.id_event)
-    console.log(event)
+    const event = await eventService.detalleEvent(enrollment.id_event);
+    console.log(event);
 
   try {
     if(event.enabled_for_enrollment){
       await eventService.inscripcionEvent(enrollment);
       return response.status(201).send("Inscripto correctamente");
-    }else{
-      return response.status(404).send("No estas habilitado para inscribirte");
     }
   } catch (error) {
     console.log(error);

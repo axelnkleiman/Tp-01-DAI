@@ -46,15 +46,15 @@ router.get("/", async (request, response) => {
     if (Category.name != null) {
       try {
         const respuesta = await categoryService.insertCategory(Category);
-        return response.status(201).json(respuesta);
+        return response.status(201).send("Categoria creada con exito");
       } catch (error) {
         console.log(error);
-        return response.status(402).json(error);
+        return response.status(400).json(error);
       }
   } else return response.status(400).json(" Datos Vacio");
   });
 
-  router.patch("/", AuthMiddleware, async (request, response) => {
+  router.put("/", AuthMiddleware, async (request, response) => {
     const category = {};
     category.name = request.body.name;
     category.display_order = request.body.display_order;
