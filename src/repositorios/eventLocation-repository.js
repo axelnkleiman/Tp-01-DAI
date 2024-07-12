@@ -63,43 +63,43 @@ export default class EventLocationRepository {
       }
     }
 
-    async UpdateEventLocation(e){
+    async UpdateEventLocation(EventLocation){
       try {
-        const values = [e.id]
+        const values = [EventLocation.id]
         var sql = `UPDATE event_locations SET`;
         var index = 2;
 
-        if (e.name != null) {
+        if (EventLocation.name != null) {
           sql += ` name=$${index},`;
-          values.push(e.name)
+          values.push(EventLocation.name)
           index++;
         }
 
-        if (e.full_address != null) {
+        if (EventLocation.full_address != null) {
           sql += ` full_address=$${index},`;
-          values.push(e.full_address)
+          values.push(EventLocation.full_address)
           index++;
         }
 
-        if (e.max_capacity != null) {
+        if (EventLocation.max_capacity != null) {
           sql += ` max_capacity=$${index},`;
-          values.push(e.max_capacity)
+          values.push(EventLocation.max_capacity)
           index++;
         }
 
-        if (e.latitude != null) {
+        if (EventLocation.latitude != null) {
           sql += ` latitude=$${index},`;
-          values.push(e.latitude)
+          values.push(EventLocation.latitude)
           index++;
         }
-        if (e.longitude != null) {
+        if (EventLocation.longitude != null) {
           sql += ` longitude=$${index},`;
-          values.push(e.longitude)
+          values.push(EventLocation.longitude)
           index++;
         }
-        if (e.id_creator_user != null) {
+        if (EventLocation.id_creator_user != null) {
           sql += ` id_creator_user=$${index},`;
-          values.push(e.id_creator_user)
+          values.push(EventLocation.id_creator_user)
           index++;
         }
 
@@ -114,13 +114,14 @@ export default class EventLocationRepository {
     }
 
     async deleteEventLocation(id){
-      try{
-      var sql = `DELETE FROM event_locations WHERE id=$1`;
-      const values=[id]
-      await this.BDclient.query(sql,values);
-      }catch(error){
+      try {
+        const sql = `DELETE FROM event_locations WHERE id=$1`;
+        const values = [id];
+        const result = await this.BDclient.query(sql, values);
+        console.log(result)
+        } catch (error) {
         console.log(error);
-      }
+        }
     }
 
     async cantEventLocation(id){

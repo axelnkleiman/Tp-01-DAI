@@ -201,7 +201,7 @@ export default class EventRepository {
         if (sql.endsWith(" where ")) {
             sql = sql.slice(0, -7);
         }
-        sql += " GROUP BY e.id, ec.id, el.id,l.id,p.id,u.id order by e.id asc limit $1 offset $2 ";
+        sql += "GROUP BY e.id, ec.id, el.id,l.id,p.id,u.id ORDER BY e.id asc limit $1 offset $2";
         const result = await this.BDclient.query(sql, values);
 
         if (result.rows.length > 0) {

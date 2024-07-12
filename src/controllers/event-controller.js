@@ -23,8 +23,8 @@ router.get("/" , async (request, response) => {
   
   try {
     if (esFecha(Event.startDate) || Event.startDate == undefined) {
-      const getEvents = await eventService.getEventByFilter(Event, limit, offset);
-      /*const getEvents = await eventService.getAllEvents(limit, offset);*/
+      /*const getEvents = await eventService.getEventByFilter(Event, limit, offset);*/
+      const getEvents = await eventService.getAllEvents(limit, offset);
       console.log(getEvents);
       return response.send(getEvents); 
     } else {
@@ -147,7 +147,7 @@ router.post("/:id/enrollment", AuthMiddleware , async (request, response) => {
   const date = new Date();
     enrollment.id_event = request.params.id;
     enrollment.id_user = request.user.id;
-    enrollment.descripcion = request.body.descripcion;
+    enrollment.description= request.body.description;
     enrollment.registration_date_time = new Date().toISOString();
     console.log(enrollment.registration_date_time);
     enrollment.attended = request.body.attended;
